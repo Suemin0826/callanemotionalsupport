@@ -112,18 +112,8 @@
         color: #7fffd4;
       }
 
-      .grounding-checklist ol {
-        padding-left: 20px;
-      }
-
-      .grounding-checklist li {
-        margin-bottom: 10px;
-        list-style-type: none;
-      }
-
-      .grounding-checklist li::before {
-        content: "✔️ ";
-        color: #7fffd4;
+      .checklist-item {
+        margin: 10px 0;
       }
 
       .settings {
@@ -136,6 +126,12 @@
 
       .settings button {
         margin: 10px;
+      }
+
+      .timer {
+        font-size: 20px;
+        color: #7fffd4;
+        margin-top: 20px;
       }
     </style>
   </head>
@@ -189,7 +185,7 @@
         <h1>PANIC HISTORY LOG</h1>
         <p>This month's panic occurrences:</p>
         <div id="panic-count">
-          <p>You survived <span id="panic-counter">0</span> times of panic attacks, you are stronger than you think!</p>
+          <p>You survived <span id="panic-counter">0</span> panic attacks, you are stronger than you think!</p>
         </div>
         <div class="record-log" id="panic-log">
           <p>Loading log...</p>
@@ -203,13 +199,11 @@
       <div id="hud">
         <h1>MINI GROUNDING CHECKLIST</h1>
         <div class="grounding-checklist">
-          <ol>
-            <li>5 things you can see</li>
-            <li>4 things you can touch</li>
-            <li>3 things you can hear</li>
-            <li>2 things you can smell</li>
-            <li>1 thing you can taste</li>
-          </ol>
+          <div class="checklist-item">👀 5 things you can see</div>
+          <div class="checklist-item">✋ 4 things you can touch</div>
+          <div class="checklist-item">👂 3 things you can hear</div>
+          <div class="checklist-item">👃 2 things you can smell</div>
+          <div class="checklist-item">👅 1 thing you can taste</div>
         </div>
         <button onclick="goToPage('main-page')">BACK</button>
       </div>
@@ -225,7 +219,6 @@
           <button onclick="changeColor('purple')">Purple</button>
           <button onclick="changeColor('blue')">Blue</button>
           <button onclick="changeColor('orange')">Orange</button>
-          <button onclick="resetColors()">Reset to Default</button>
           <button onclick="goToPage('main-page')">BACK</button>
         </div>
       </div>
@@ -238,18 +231,60 @@
         const pages = document.querySelectorAll('.page');
         pages.forEach(p => p.classList.remove('active'));
         document.getElementById(page).classList.add('active');
+        randomMessage();
       }
 
       function resetLog() {
-        const log = document.getElementById('panic-log');
-        log.innerHTML = "<p>Log has been reset.</p>";
         panicCount = 0;
         document.getElementById('panic-counter').textContent = panicCount;
+        const log = document.getElementById('panic-log');
+        log.innerHTML = "<p>Log has been reset.</p>";
       }
 
       function playAudio(audioId) {
         const audio = document.getElementById(audioId);
         audio.play();
+      }
+
+      function randomMessage() {
+        const messages = [
+          "Stay calm, you are doing great!",
+          "Take a deep breath, you are in control.",
+          "You’ve got this, breathe slowly.",
+          "Relax, everything will be okay.",
+          "Focus on your breath, you’re safe here.",
+          "You are doing great!",
+          "I love you, Callan.",
+          "It's all going to be fine.",
+          "Take it one step at a time.",
+          "You're not alone in this.",
+          "Keep going, you're amazing.",
+          "You're strong, you got this.",
+          "Everything will be okay.",
+          "Stay calm, stay focused.",
+          "Breathe, and everything will fall into place.",
+          "I believe in you.",
+          "You're doing fantastic!",
+          "Take a deep breath, relax.",
+          "You're capable of handling this.",
+          "Trust yourself, you can do it.",
+          "You are doing great!",
+          "I love you, Callan.",
+          "Suemin is proud of you.",
+          "Suemin loves you so much.",
+          "You're not alone.",
+          "You're stronger than you think.",
+          "Just breathe, love.",
+          "Your brain is safe right now.",
+          "This too shall pass.",
+          "Spartans never panic, they adapt.",
+          "You’re doing fantastic.",
+          "Trust Suemin, you’re okay.",
+          "❤️ You are loved by Suemin."
+        ];
+
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        document.getElementById('panic-message').textContent = message;
       }
 
       function changeTheme(theme) {
@@ -264,72 +299,21 @@
 
       function changeColor(color) {
         const hud = document.getElementById('hud');
+        const buttons = document.querySelectorAll('button');
         if (color === 'green') {
-          hud.style.color = '#00ff99';
+          document.body.style.color = '#00ff99';
+          buttons.forEach(button => button.style.backgroundColor = '#00ff99');
         } else if (color === 'purple') {
-          hud.style.color = '#a966ff';
+          document.body.style.color = '#a966ff';
+          buttons.forEach(button => button.style.backgroundColor = '#a966ff');
         } else if (color === 'blue') {
-          hud.style.color = '#66ccff';
+          document.body.style.color = '#66ccff';
+          buttons.forEach(button => button.style.backgroundColor = '#66ccff');
         } else if (color === 'orange') {
-          hud.style.color = '#ff6600';
+          document.body.style.color = '#ff6600';
+          buttons.forEach(button => button.style.backgroundColor = '#ff6600');
         }
       }
-
-      function resetColors() {
-        document.body.style.backgroundColor = '#0d1117';
-        document.body.style.color = '#00ff99';
-        document.getElementById('hud').style.color = '#00ff99';
-      }
-
-      const messages = [
-        "Stay calm, you are doing great!",
-        "Take a deep breath, you are in control.",
-        "You’ve got this, breathe slowly.",
-        "Relax, everything will be okay.",
-        "Focus on your breath, you’re safe here.",
-        "You are doing great!",
-        "I love you, Callan.",
-        "It's all going to be fine.",
-        "Take it one step at a time.",
-        "You're not alone in this.",
-        "Keep going, you're amazing.",
-        "You're strong, you got this.",
-        "Everything will be okay.",
-        "Stay calm, stay focused.",
-        "Breathe, and everything will fall into place.",
-        "I believe in you.",
-        "You're doing fantastic!",
-        "Take a deep breath, relax.",
-        "You're capable of handling this.",
-        "Trust yourself, you can do it.",
-        "You are doing great!",
-        "I love you, Callan.",
-        "Suemin is proud of you.",
-        "Suemin loves you so much.",
-        "You're not alone.",
-        "You're stronger than you think.",
-        "Just breathe, love.",
-        "Your brain is safe right now.",
-        "This too shall pass.",
-        "Spartans never panic, they adapt.",
-        "You’re doing fantastic.",
-        "Trust Suemin, you’re okay.",
-        "❤️ You are loved by Suemin."
-      ];
-
-      function randomMessage() {
-        const message = messages[Math.floor(Math.random() * messages.length)];
-        document.getElementById('panic-message').textContent = message;
-        panicCount++;
-        document.getElementById('panic-counter').textContent = panicCount;
-
-        const log = document.getElementById('panic-log');
-        const logEntry = document.createElement('p');
-        logEntry.textContent = message;
-        log.appendChild(logEntry);
-      }
-
-      randomMessage();
     </script>
   </body>
 </html>
