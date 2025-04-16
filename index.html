@@ -162,48 +162,52 @@
     </div>
 
     <script>
-      const messages = [
-        "You are doing great!",
-        "I love you, Callan.",
-        "It's all going to be fine.",
-        "Take it one step at a time.",
-        "You're not alone in this.",
-        "Keep going, you're amazing.",
-        "You're strong, you got this.",
-        "Everything will be okay.",
-        "Stay calm, stay focused.",
-        "Breathe, and everything will fall into place.",
-        "I believe in you.",
-        "You're doing fantastic!",
-        "Take a deep breath, relax.",
-        "You're capable of handling this.",
-        "Trust yourself, you can do it."
-      ];
+  const messages = [
+    "You are doing great!",
+    "I love you, Callan.",
+    "It's all going to be fine.",
+    "Take it one step at a time.",
+    "You're not alone in this.",
+    "Keep going, you're amazing.",
+    "You're strong, you got this.",
+    "Everything will be okay.",
+    "Stay calm, stay focused.",
+    "Breathe, and everything will fall into place.",
+    "I believe in you.",
+    "You're doing fantastic!",
+    "Take a deep breath, relax.",
+    "You're capable of handling this.",
+    "Trust yourself, you can do it."
+  ];
 
-      function goToPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-      }
+  function goToPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
 
-      function triggerPanic() {
-        document.getElementById("hyrax-icon").style.display = "block"; // Show Hyrax
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-        document.getElementById("panic-message").textContent = randomMessage;
-        goToPage('panic-page'); // Navigate to Panic Page
+  function triggerPanic() {
+    document.getElementById("hyrax-icon").style.display = "block"; // Show Hyrax
 
-        alert("Panic detected. Activating calming protocol... 🛡️");
-        document.body.style.backgroundImage = "radial-gradient(#0d1117, #1a1a1a)";
-      }
+    // Set random message before page transition
+    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+    document.getElementById("panic-message").textContent = randomMessage;
 
-      function playAudio(id) {
-        document.querySelectorAll('audio').forEach(audio => audio.pause());
-        const selected = document.getElementById(id);
-        selected.currentTime = 0;
-        selected.play();
-      }
+    // Delay the page switch to allow the message to appear first
+    setTimeout(() => {
+      goToPage('panic-page'); // Navigate to Panic Page after message is set
+    }, 500); // 500ms delay (you can adjust this time for a better effect)
 
-      // Initial Trigger (for testing)
-      // triggerPanic();
-    </script>
-  </body>
-</html>
+    alert("Panic detected. Activating calming protocol... 🛡️");
+    document.body.style.backgroundImage = "radial-gradient(#0d1117, #1a1a1a)";
+  }
+
+  function playAudio(id) {
+    document.querySelectorAll('audio').forEach(audio => audio.pause());
+    const selected = document.getElementById(id);
+    selected.currentTime = 0;
+    selected.play();
+  }
+
+  // Initial Trigger (for testing)
+  // triggerPanic();
+</script>
