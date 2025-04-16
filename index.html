@@ -1,191 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Stable Console</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
-  <style>
-    :root {
-      --theme-color: #00ff99;
-      --background: #0d1117;
-      --text-color: #00ff99;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Project Stable Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0d1117;
+        background-image: radial-gradient(#0d1117, #000000);
+        color: #00ff99;
+        font-family: 'Press Start 2P', cursive;
+        text-align: center;
+      }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--background);
-      background-image: radial-gradient(var(--background), #000000);
-      color: var(--text-color);
-      font-family: 'Press Start 2P', cursive;
-      text-align: center;
-    }
+      h1 {
+        margin-top: 60px;
+        font-size: 20px;
+      }
 
-    h1 {
-      margin-top: 60px;
-      font-size: 20px;
-    }
+      p {
+        font-size: 10px;
+        color: #7fffd4;
+        margin-bottom: 40px;
+      }
 
-    p {
-      font-size: 10px;
-      color: #7fffd4;
-      margin-bottom: 40px;
-    }
+      button {
+        font-family: 'Press Start 2P', cursive;
+        background-color: #00ff99;
+        color: #0d1117;
+        border: none;
+        padding: 20px;
+        margin: 20px auto;
+        display: block;
+        font-size: 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-shadow: 0 0 15px #00ff99;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
 
-    button {
-      font-family: 'Press Start 2P', cursive;
-      background-color: var(--text-color);
-      color: var(--background);
-      border: none;
-      padding: 20px;
-      margin: 20px auto;
-      display: block;
-      font-size: 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      box-shadow: 0 0 15px var(--text-color);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+      button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px #00ff99;
+      }
 
-    button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px var(--text-color);
-    }
+      #hud {
+        padding: 40px;
+        border: 2px solid #00ff99;
+        border-radius: 8px;
+        max-width: 500px;
+        margin: 40px auto;
+        box-shadow: 0 0 20px #00ff99;
+        background-color: rgba(13, 17, 23, 0.85);
+        position: relative;
+      }
 
-    #hud {
-      padding: 40px;
-      border: 2px solid var(--text-color);
-      border-radius: 8px;
-      max-width: 500px;
-      margin: 40px auto;
-      box-shadow: 0 0 20px var(--text-color);
-      background-color: rgba(13, 17, 23, 0.85);
-      position: relative;
-    }
+      audio {
+        margin-top: 20px;
+        outline: none;
+      }
 
-    .page {
-      display: none;
-    }
+      .page {
+        display: none;
+      }
 
-    .active {
-      display: block;
-    }
+      .active {
+        display: block;
+      }
 
-    .panic-log-entry {
-      font-size: 10px;
-      color: #7fffd4;
-      margin-top: 10px;
-    }
+      .breathing-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 40px auto;
+        background-color: #00ff99;
+        animation: breathe 6s ease-in-out infinite;
+      }
 
-    .panic-header {
-      margin-bottom: 20px;
-    }
+      @keyframes breathe {
+        0% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.5); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.7; }
+      }
 
-    #panic-count {
-      font-size: 12px;
-      margin-bottom: 10px;
-      color: var(--text-color);
-    }
-  </style>
-</head>
-<body>
-  <div id="main-page" class="page active">
-    <div id="hud">
-      <h1>STABLE CONSOLE</h1>
-      <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
-      <button onclick="goToPage('panic-page')">PANIC BUTTON</button>
-      <button onclick="goToPage('log-page')">VIEW PANIC LOG</button>
-    </div>
-  </div>
+      .panic-message {
+        font-size: 14px;
+        color: #7fffd4;
+        margin-top: 20px;
+        font-family: 'Press Start 2P', cursive;
+      }
 
-  <div id="panic-page" class="page">
-    <div id="hud">
-      <h1>PANIC RESPONSE ACTIVATED</h1>
-      <p id="panic-message">Loading message...</p>
-      <button onclick="goToPage('main-page')">BACK</button>
-    </div>
-  </div>
+      .record-log {
+        margin-top: 20px;
+        background-color: rgba(0, 255, 153, 0.2);
+        padding: 20px;
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: 10px;
+      }
 
-  <div id="log-page" class="page">
-    <div id="hud">
-      <h1>PANIC HISTORY</h1>
-      <div class="panic-header">
-        <p id="panic-count">Loading...</p>
-        <p>You survived <span id="survival-count"></span> times of panic attacks, you are stronger than you think!</p>
+      .record-log p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .grounding-checklist {
+        margin: 20px;
+        font-size: 14px;
+        text-align: left;
+        color: #7fffd4;
+      }
+
+      .settings {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main-page" class="page active">
+      <div id="hud">
+        <h1>STABLE CONSOLE</h1>
+        <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
+        <button onclick="goToPage('breathing-page')">START BREATHING</button>
+        <button onclick="goToPage('panic-page')">PANIC BUTTON</button>
+        <button onclick="goToPage('audio-page')">AUDIO MODE</button>
+        <button onclick="goToPage('log-page')">PANIC HISTORY LOG</button>
+        <button onclick="goToPage('settings-page')">SETTINGS</button>
+        <button onclick="goToPage('grounding-page')">MINI GROUNDING CHECKLIST</button>
+        <button onclick="goToPage('game-page')">MINI GAME</button>
       </div>
-      <div id="panic-log"></div>
-      <button onclick="clearLog()">RESET LOG</button>
-      <button onclick="goToPage('main-page')">BACK</button>
     </div>
-  </div>
 
-  <script>
-    const messages = [
-      "You are doing great!",
-      "I love you, Callan.",
-      "It's all going to be fine.",
-      "Take it one step at a time.",
-      "You're not alone in this.",
-      "Keep going, you're amazing.",
-      "You're strong, you got this.",
-      "Everything will be okay.",
-      "Stay calm, stay focused.",
-      "Breathe, and everything will fall into place.",
-      "I believe in you.",
-      "You're doing fantastic!",
-      "Take a deep breath, relax.",
-      "You're capable of handling this.",
-      "Trust yourself, you can do it.",
-      "Suemin loves you so much.",
-      "Callan, you're safe now.",
-      "Suemin is proud of you.",
-      "You made it this far—don’t stop now.",
-      "I’m here with you always.",
-      // Add 20+ Halo inspirational quotes here
-    ];
+    <div id="breathing-page" class="page">
+      <div id="hud">
+        <h1>BREATHING PROTOCOL</h1>
+        <p>Follow the circle. Breathe in... and out.</p>
+        <div class="breathing-circle"></div>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
 
-    function goToPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
-      if (id === 'log-page') updateLog();
-    }
+    <div id="audio-page" class="page">
+      <div id="hud">
+        <h1>AUDIO COMFORT MODE</h1>
+        <p>Select one of Suemin's nerdy babbles:</p>
+        <button onclick="playAudio('audio1')">SUEMIN 1</button>
+        <button onclick="playAudio('audio2')">SUEMIN 2</button>
+        <button onclick="playAudio('audio3')">SUEMIN 3</button>
+        <button onclick="goToPage('main-page')">BACK</button>
+        <audio id="audio1" src="suemin1.mp3" preload="auto"></audio>
+        <audio id="audio2" src="suemin2.mp3" preload="auto"></audio>
+        <audio id="audio3" src="suemin3.mp3" preload="auto"></audio>
+      </div>
+    </div>
 
-    function triggerPanic() {
-      const message = messages[Math.floor(Math.random() * messages.length)];
-      document.getElementById("panic-message").textContent = message;
-      logPanic(message);
-      goToPage('panic-page');
-    }
+    <div id="panic-page" class="page">
+      <div id="hud">
+        <h1>PANIC RESPONSE ACTIVATED</h1>
+        <p class="panic-message" id="panic-message">Loading... Please wait.</p>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
 
-    function logPanic(message) {
-      const logs = JSON.parse(localStorage.getItem('panicLogs') || '[]');
-      logs.push({ message, date: new Date().toISOString() });
-      localStorage.setItem('panicLogs', JSON.stringify(logs));
-    }
+    <div id="log-page" class="page">
+      <div id="hud">
+        <h1>PANIC HISTORY LOG</h1>
+        <p>This month's panic occurrences:</p>
+        <div id="panic-count">
+          <p>You survived 3 times of panic attacks, you are stronger than you think!</p>
+        </div>
+        <div class="record-log" id="panic-log">
+          <p>Loading log...</p>
+        </div>
+        <button onclick="resetLog()">RESET LOG</button>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
 
-    function updateLog() {
-      const logContainer = document.getElementById('panic-log');
-      const logs = JSON.parse(localStorage.getItem('panicLogs') || '[]');
-      logContainer.innerHTML = '';
-      const month = new Date().getMonth();
-      let countThisMonth = 0;
-      logs.forEach(entry => {
-        const entryDate = new Date(entry.date);
-        if (entryDate.getMonth() === month) countThisMonth++;
-        const log = document.createElement('div');
-        log.className = 'panic-log-entry';
-        log.textContent = `${entryDate.toLocaleString()}: ${entry.message}`;
-        logContainer.appendChild(log);
-      });
-      document.getElementById('panic-count').textContent = `Panic Events This Month: ${countThisMonth}`;
-      document.getElementById('survival-count').textContent = logs.length;
-    }
+    <div id="settings-page" class="page">
+      <div id="hud">
+        <h1>SETTINGS</h1>
+        <button onclick="goToPage('main-page')">BACK</button>
+        <div class="settings">
+          <button onclick="changeTheme('light')">LIGHT MODE</button>
+          <button onclick="changeTheme('dark')">DARK MODE</button>
+          <button onclick="changeFont('Press Start 2P')">Change Font: Press Start 2P</button>
+          <button onclick="changeColor('green')">Change Theme Color: Green</button>
+          <button onclick="changeColor('purple')">Change Theme Color: Purple</button>
+          <button onclick="changeColor('blue')">Change Theme Color: Blue</button>
+          <button onclick="changeColor('orange')">Change Theme Color: Orange</button>
+        </div>
+      </div>
+    </div>
 
-    function clearLog() {
-      localStorage.removeItem('panicLogs');
-      updateLog();
-    }
-  </script>
-</body>
-</html>
+    <div id="grounding-page" class="page">
+      <div id="hud">
+        <h1>MINI GROUNDING CHECKLIST</h1>
+        <div class="grounding-checklist">
+          <ol>
+            <li>5 things you can see</li>
+            <li>4 things you can touch</li>
+            <li>3 things you can hear</li>
+            <li>2 things you can smell</li>
+            <li>1 thing you can taste</li>
+          </ol>
+        </div>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
