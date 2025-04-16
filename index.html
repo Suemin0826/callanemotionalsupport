@@ -214,3 +214,54 @@
         </div>
         <button onclick="goToPage('main-page')">BACK</button>
       </div>
+    </div>
+
+    <script>
+      function goToPage(page) {
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+        document.getElementById(page).classList.add('active');
+      }
+
+      function resetLog() {
+        const log = document.getElementById('panic-log');
+        log.innerHTML = "<p>Log has been reset.</p>";
+      }
+
+      function playAudio(audioId) {
+        const audio = document.getElementById(audioId);
+        audio.play();
+      }
+
+      function changeTheme(theme) {
+        if (theme === 'light') {
+          document.body.style.backgroundColor = '#ffffff';
+          document.body.style.color = '#000000';
+        } else if (theme === 'dark') {
+          document.body.style.backgroundColor = '#0d1117';
+          document.body.style.color = '#00ff99';
+        }
+      }
+
+      function changeFont(font) {
+        document.body.style.fontFamily = font;
+      }
+
+      function changeColor(color) {
+        if (color === 'green') {
+          document.body.style.backgroundColor = '#0d1117';
+          document.body.style.color = '#00ff99';
+        } else if (color === 'purple') {
+          document.body.style.backgroundColor = '#1d0f4f';
+          document.body.style.color = '#a966ff';
+        } else if (color === 'blue') {
+          document.body.style.backgroundColor = '#0d1117';
+          document.body.style.color = '#66ccff';
+        } else if (color === 'orange') {
+          document.body.style.backgroundColor = '#1c1c1c';
+          document.body.style.color = '#ff6600';
+        }
+      }
+    </script>
+  </body>
+</html>
