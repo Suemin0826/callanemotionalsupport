@@ -1,276 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Stable Console</title>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #0d1117;
-      color: #00ff99;
-      font-family: 'Press Start 2P', cursive;
-      text-align: center;
-      overflow-y: auto;
-      height: 100vh;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Project Stable Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0d1117;
+        background-image: radial-gradient(#0d1117, #000000);
+        color: #00ff99;
+        font-family: 'Press Start 2P', cursive;
+        text-align: center;
+        overflow-y: auto;
+        height: 100vh;
+      }
 
-    h1 {
-      margin-top: 60px;
-      font-size: 20px;
-    }
+      h1 {
+        margin-top: 60px;
+        font-size: 20px;
+      }
 
-    p {
-      font-size: 10px;
-      color: #7fffd4;
-      margin-bottom: 40px;
-    }
+      p {
+        font-size: 10px;
+        color: #7fffd4;
+        margin-bottom: 40px;
+      }
 
-    button {
-      font-family: 'Press Start 2P', cursive;
-      background-color: #00ff99;
-      color: #0d1117;
-      border: 2px solid #00ff99;  /* Pixel-style border */
-      padding: 20px;
-      margin: 10px auto;
-      display: block;
-      font-size: 12px;
-      cursor: pointer;
-      border-radius: 4px;
-      box-shadow: 0 0 5px #00ff99;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      width: 80%;
-    }
+      button {
+        font-family: 'Press Start 2P', cursive;
+        background-color: #00ff99;
+        color: #0d1117;
+        border: none;
+        padding: 20px;
+        margin: 10px auto;
+        display: block;
+        font-size: 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        box-shadow: 0 0 15px #00ff99;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        width: 80%;
+      }
 
-    button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 10px #00ff99;
-    }
+      button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 25px #00ff99;
+      }
 
-    #hud {
-      padding: 40px;
-      border: 2px solid #00ff99; /* Pixel-style border */
-      border-radius: 8px;
-      max-width: 600px;
-      margin: 40px auto;
-      box-shadow: 0 0 15px #00ff99;
-      background-color: rgba(13, 17, 23, 0.85);
-      position: relative;
-    }
+      #hud {
+        padding: 40px;
+        border: 2px solid #00ff99;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: 40px auto;
+        box-shadow: 0 0 20px #00ff99;
+        background-color: rgba(13, 17, 23, 0.85);
+        position: relative;
+      }
 
-    .page {
-      display: none;
-    }
+      .page {
+        display: none;
+      }
 
-    .active {
-      display: block;
-    }
+      .active {
+        display: block;
+      }
 
-    .breathing-circle {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      margin: 40px auto;
-      background-color: #00ff99;
-      animation: breathe 6s ease-in-out infinite;
-    }
+      .breathing-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 40px auto;
+        background-color: #00ff99;
+        animation: breathe 6s ease-in-out infinite;
+      }
 
-    @keyframes breathe {
-      0% { transform: scale(1); opacity: 0.7; }
-      50% { transform: scale(1.5); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.7; }
-    }
+      @keyframes breathe {
+        0% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.5); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.7; }
+      }
 
-    .panic-message {
-      font-size: 14px;
-      color: #7fffd4;
-      margin-top: 20px;
-      font-family: 'Press Start 2P', cursive;
-    }
+      .panic-message {
+        font-size: 14px;
+        color: #7fffd4;
+        margin-top: 20px;
+        font-family: 'Press Start 2P', cursive;
+      }
 
-    .record-log {
-      margin-top: 20px;
-      background-color: rgba(0, 255, 153, 0.2);
-      padding: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-      border-radius: 10px;
-    }
+      .record-log {
+        margin-top: 20px;
+        background-color: rgba(0, 255, 153, 0.2);
+        padding: 20px;
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: 10px;
+      }
 
-    .record-log p {
-      font-size: 14px;
-      line-height: 1.5;
-    }
+      .record-log p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
 
-    .settings {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin-top: 40px;
-    }
+      .grounding-checklist {
+        margin: 20px;
+        font-size: 14px;
+        text-align: left;
+        color: #7fffd4;
+      }
 
-    .timer {
-      font-size: 20px;
-      color: #7fffd4;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div id="hud">
-    <h1>Project Stable Console</h1>
+      .settings {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+      }
 
-    <!-- Panic Page -->
-    <div id="panic-page" class="page active">
-      <button onclick="goToPage('log-page')">View Panic Log</button>
-      <div class="breathing-circle"></div>
-      <button onclick="startTimer()">Start Timer</button>
-      <button onclick="goToPage('settings-page')">Settings</button>
-      <div id="panic-message" class="panic-message"></div>
-    </div>
-
-    <!-- Timer Page -->
-    <div id="timer-page" class="page">
-      <button onclick="goToPage('panic-page')">Back to Panic Page</button>
-      <div class="timer" id="timer-display">Time left: 60</div>
-      <button onclick="stopTimer()">Stop Timer</button>
-    </div>
-
-    <!-- Panic Log Page -->
-    <div id="log-page" class="page">
-      <button onclick="goToPage('panic-page')">Back to Panic Page</button>
-      <div class="record-log" id="panic-log"></div>
-      <p id="panic-counter">Total Panic Button Presses: 0</p>
-      <button onclick="resetLog()">Reset Log</button>
-    </div>
-
-    <!-- Settings Page -->
-    <div id="settings-page" class="page">
-      <button onclick="goToPage('panic-page')">Back to Panic Page</button>
-      <div class="settings">
-        <button onclick="changeTheme('light')">Light Mode</button>
-        <button onclick="changeTheme('dark')">Dark Mode</button>
-        <button onclick="changeColor('green')">Green</button>
-        <button onclick="changeColor('purple')">Purple</button>
-        <button onclick="changeColor('blue')">Blue</button>
-        <button onclick="changeColor('orange')">Orange</button>
+      .settings button {
+        margin: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main-page" class="page active">
+      <div id="hud">
+        <h1>STABLE CONSOLE</h1>
+        <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
+        <button onclick="goToPage('breathing-page')">START BREATHING</button>
+        <button onclick="goToPage('panic-page')">PANIC BUTTON</button>
+        <button onclick="goToPage('audio-page')">AUDIO MODE</button>
+        <button onclick="goToPage('log-page')">PANIC HISTORY LOG</button>
+        <button onclick="goToPage('grounding-page')">MINI GROUNDING CHECKLIST</button>
+        <button onclick="goToPage('settings-page')">SETTINGS</button>
       </div>
     </div>
-  </div>
 
-  <script>
-    let panicCount = parseInt(localStorage.getItem('panicCount')) || 0;
-    let panicLog = JSON.parse(localStorage.getItem('panicLog')) || [];
-    let timerInterval;
+    <div id="breathing-page" class="page">
+      <div id="hud">
+        <h1>BREATHING PROTOCOL</h1>
+        <p>Follow the circle. Breathe in... and out.</p>
+        <div class="breathing-circle"></div>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
 
-    function goToPage(page) {
-      const pages = document.querySelectorAll('.page');
-      pages.forEach(p => p.classList.remove('active'));
-      document.getElementById(page).classList.add('active');
-      if (page === 'panic-page') recordPanic();
-      if (page === 'log-page') updateLogDisplay();
-      if (page === 'settings-page') loadTheme();
-      if (page === 'timer-page') randomMessage();
-    }
+    <div id="audio-page" class="page">
+      <div id="hud">
+        <h1>AUDIO COMFORT MODE</h1>
+        <p>Select one of Suemin's nerdy babbles:</p>
+        <button onclick="playAudio('audio1')">SUEMIN 1</button>
+        <button onclick="playAudio('audio2')">SUEMIN 2</button>
+        <button onclick="playAudio('audio3')">SUEMIN 3</button>
+        <button onclick="goToPage('main-page')">BACK</button>
+        <audio id="audio1" src="suemin1.mp3" preload="auto"></audio>
+        <audio id="audio2" src="suemin2.mp3" preload="auto"></audio>
+        <audio id="audio3" src="suemin3.mp3" preload="auto"></audio>
+      </div>
+    </div>
 
-    function recordPanic() {
-      panicCount++;
-      localStorage.setItem('panicCount', panicCount);
-      const time = new Date().toLocaleString();
-      panicLog.push(time);
-      localStorage.setItem('panicLog', JSON.stringify(panicLog));
-    }
+    <div id="panic-page" class="page">
+      <div id="hud">
+        <h1>PANIC RESPONSE ACTIVATED</h1>
+        <p class="panic-message" id="panic-message">Loading... Please wait.</p>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
 
-    function updateLogDisplay() {
-      document.getElementById('panic-counter').textContent = panicCount;
-      const log = document.getElementById('panic-log');
-      log.innerHTML = panicLog.map(time => `<p>${time}</p>`).join('');
-    }
+    <div id="log-page" class="page">
+      <div id="hud">
+        <h1>PANIC HISTORY LOG</h1>
+        <p>This month's panic occurrences:</p>
+        <div id="panic-count">
+          <p>You survived 3 times of panic attacks, you are stronger than you think!</p>
+        </div>
+        <div class="record-log" id="panic-log">
+          <p>Loading log...</p>
+        </div>
+        <button onclick="resetLog()">RESET LOG</button>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
 
-    function resetLog() {
-      panicCount = 0;
-      panicLog = [];
-      localStorage.setItem('panicCount', 0);
-      localStorage.setItem('panicLog', JSON.stringify([]));
-      updateLogDisplay();
-    }
+    <div id="grounding-page" class="page">
+      <div id="hud">
+        <h1>MINI GROUNDING CHECKLIST</h1>
+        <div class="grounding-checklist">
+          <ol>
+            <li>5 things you can see</li>
+            <li>4 things you can touch</li>
+            <li>3 things you can hear</li>
+            <li>2 things you can smell</li>
+            <li>1 thing you can taste</li>
+          </ol>
+        </div>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
 
-    function startTimer() {
-      let timer = 60;
-      const timerDisplay = document.getElementById('timer-display');
-      timerInterval = setInterval(function() {
-        timer--;
-        if (timer <= 0) {
-          clearInterval(timerInterval);
-          timerDisplay.textContent = "Time's up!";
-        } else {
-          timerDisplay.textContent = `Time left: ${timer}s`;
+    <div id="settings-page" class="page">
+      <div id="hud">
+        <h1>SETTINGS</h1>
+        <div class="settings">
+          <button onclick="changeTheme('light')">LIGHT MODE</button>
+          <button onclick="changeTheme('dark')">DARK MODE</button>
+          <button onclick="changeColor('green')">Green</button>
+          <button onclick="changeColor('purple')">Purple</button>
+          <button onclick="changeColor('blue')">Blue</button>
+          <button onclick="changeColor('orange')">Orange</button>
+          <button onclick="goToPage('main-page')">BACK</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function goToPage(page) {
+        const pages = document.querySelectorAll('.page');
+        pages.forEach(p => p.classList.remove('active'));
+        document.getElementById(page).classList.add('active');
+      }
+
+      function resetLog() {
+        const log = document.getElementById('panic-log');
+        log.innerHTML = "<p>Log has been reset.</p>";
+      }
+
+      function playAudio(audioId) {
+        const audio = document.getElementById(audioId);
+        audio.play();
+      }
+
+      function changeTheme(theme) {
+        if (theme === 'light') {
+          document.body.style.backgroundColor = '#ffffff';
+          document.body.style.color = '#000000';
+        } else if (theme === 'dark') {
+          document.body.style.backgroundColor = '#0d1117';
+          document.body.style.color = '#00ff99';
         }
-      }, 1000);
-    }
+      }
 
-    function stopTimer() {
-      clearInterval(timerInterval);
-      document.getElementById('timer-display').textContent = "Timer stopped.";
-    }
+      function changeColor(color) {
+        const hud = document.getElementById('hud');
+        if (color === 'green') {
+          hud.style.backgroundColor = '#00ff99';
+        } else if (color === 'purple') {
+          hud.style.backgroundColor = '#a966ff';
+        } else if (color === 'blue') {
+          hud.style.backgroundColor = '#66ccff';
+        } else if (color === 'orange') {
+          hud.style.backgroundColor = '#ff6600';
+        }
+      }
 
-    function randomMessage() {
       const messages = [
         "Stay calm, you are doing great!",
         "Take a deep breath, you are in control.",
         "You’ve got this, breathe slowly.",
         "Relax, everything will be okay.",
-        "Focus on your breath, you’re safe here.",
-        "I love you, Callan.",
-        "Suemin is proud of you.",
-        "❤️ You are loved by Suemin.",
+        "Focus on your breath, you’re safe here."
       ];
-      const msg = messages[Math.floor(Math.random() * messages.length)];
-      document.getElementById('panic-message').textContent = msg;
-    }
 
-    function changeTheme(theme) {
-      if (theme === 'light') {
-        document.body.style.backgroundColor = '#ffffff';
-        document.body.style.color = '#000000';
-      } else {
-        document.body.style.backgroundColor = '#0d1117';
-        document.body.style.color = localStorage.getItem('color') || '#00ff99';
+      function randomMessage() {
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        document.getElementById('panic-message').textContent = message;
       }
-      localStorage.setItem('theme', theme);
-    }
 
-    function changeColor(color) {
-      const buttons = document.querySelectorAll('button');
-      const colorMap = {
-        green: '#00ff99',
-        purple: '#a966ff',
-        blue: '#66ccff',
-        orange: '#ff6600'
-      };
-      const selected = colorMap[color];
-      buttons.forEach(btn => {
-        btn.style.backgroundColor = selected;
-        btn.style.borderColor = selected;
-      });
-      localStorage.setItem('color', selected);
-    }
-
-    function loadTheme() {
-      const theme = localStorage.getItem('theme') || 'dark';
-      changeTheme(theme);
-      const color = localStorage.getItem('color') || '#00ff99';
-      document.body.style.color = color;
-      document.querySelectorAll('button').forEach(btn => btn.style.backgroundColor = color);
-    }
-
-    window.onload = () => {
-      loadTheme();
-      updateLogDisplay();
-    }
-  </script>
-</body>
+      randomMessage();
+    </script>
+  </body>
 </html>
