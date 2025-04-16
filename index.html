@@ -1,196 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Project Stable Console</title>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #0d1117;
-        background-image: radial-gradient(#0d1117, #000000);
-        color: #00ff99;
-        font-family: 'Press Start 2P', cursive;
-        text-align: center;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Stable Console</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #0d1117;
+      background-image: radial-gradient(#0d1117, #000000);
+      color: #00ff99;
+      font-family: 'Press Start 2P', cursive;
+      text-align: center;
+    }
 
-      h1 {
-        margin-top: 60px;
-        font-size: 20px;
-      }
+    h1 {
+      margin-top: 60px;
+      font-size: 20px;
+    }
 
-      p {
-        font-size: 10px;
-        color: #7fffd4;
-        margin-bottom: 40px;
-      }
+    p {
+      font-size: 10px;
+      color: #7fffd4;
+      margin-bottom: 40px;
+    }
 
-      button {
-        font-family: 'Press Start 2P', cursive;
-        background-color: #00ff99;
-        color: #0d1117;
-        border: none;
-        padding: 20px;
-        margin: 20px auto;
-        display: block;
-        font-size: 12px;
-        cursor: pointer;
-        border-radius: 4px;
-        box-shadow: 0 0 15px #00ff99;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
+    button {
+      font-family: 'Press Start 2P', cursive;
+      background-color: #00ff99;
+      color: #0d1117;
+      border: none;
+      padding: 20px;
+      margin: 20px auto;
+      display: block;
+      font-size: 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 0 0 15px #00ff99;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-      button:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 25px #00ff99;
-      }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #00ff99;
+    }
 
-      #hud {
-        padding: 40px;
-        border: 2px solid #00ff99;
-        border-radius: 8px;
-        max-width: 500px;
-        margin: 40px auto;
-        box-shadow: 0 0 20px #00ff99;
-        background-color: rgba(13, 17, 23, 0.85);
-        position: relative;
-      }
+    #hud {
+      padding: 40px;
+      border: 2px solid #00ff99;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: 40px auto;
+      box-shadow: 0 0 20px #00ff99;
+      background-color: rgba(13, 17, 23, 0.85);
+      position: relative;
+    }
 
-      audio {
-        margin-top: 20px;
-        outline: none;
-      }
+    .page {
+      display: none;
+    }
 
-      .helmet-ui {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: url('https://i.imgur.com/2nXbtjl.png') center/cover no-repeat;
-        opacity: 0.1;
-        pointer-events: none;
-      }
+    .active {
+      display: block;
+    }
 
-      .page {
-        display: none;
-      }
+    .breathing-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin: 40px auto;
+      background-color: #00ff99;
+      animation: breathe 6s ease-in-out infinite;
+    }
 
-      .active {
-        display: block;
-      }
+    @keyframes breathe {
+      0% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.5); opacity: 1; }
+      100% { transform: scale(1); opacity: 0.7; }
+    }
 
-      .breathing-circle {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin: 40px auto;
-        background-color: #00ff99;
-        animation: breathe 6s ease-in-out infinite;
-      }
+    .panic-message {
+      font-size: 14px;
+      color: #7fffd4;
+      margin-top: 20px;
+    }
 
-      @keyframes breathe {
-        0% { transform: scale(1); opacity: 0.7; }
-        50% { transform: scale(1.5); opacity: 1; }
-        100% { transform: scale(1); opacity: 0.7; }
-      }
+    .grounding-step {
+      margin: 10px 0;
+      font-size: 12px;
+    }
 
-      .panic-message {
-        font-size: 14px;
-        color: #7fffd4;
-        margin-top: 20px;
-        font-family: 'Press Start 2P', cursive;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="helmet-ui"></div>
+    .timer-bar {
+      width: 100%;
+      height: 10px;
+      background-color: #333;
+      margin: 20px 0;
+    }
 
-    <div id="main-page" class="page active">
-      <div id="hud">
-        <h1>STABLE CONSOLE</h1>
-        <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
-        <button onclick="goToPage('breathing-page')">START BREATHING</button>
-        <button onclick="triggerPanic()">PANIC BUTTON</button>
-        <button onclick="goToPage('audio-page')">AUDIO MODE</button>
-      </div>
+    .timer-progress {
+      height: 100%;
+      background-color: #00ff99;
+      width: 0%;
+    }
+
+    input[type="file"] {
+      margin-top: 20px;
+      color: #00ff99;
+    }
+
+    #uploaded-gif {
+      margin-top: 20px;
+      max-width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div id="main-page" class="page active">
+    <div id="hud">
+      <h1>STABLE CONSOLE</h1>
+      <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
+      <button onclick="goToPage('breathing-page')">START BREATHING</button>
+      <button onclick="triggerPanic()">PANIC BUTTON</button>
+      <button onclick="goToPage('audio-page')">AUDIO MODE</button>
+      <button onclick="goToPage('recovery-page')">RECOVERY TIMER</button>
+      <button onclick="goToPage('grounding-page')">GROUNDING CHECKLIST</button>
+      <button onclick="goToPage('log-page')">PANIC LOG</button>
     </div>
+  </div>
 
-    <div id="breathing-page" class="page">
-      <div id="hud">
-        <h1>BREATHING PROTOCOL</h1>
-        <p>Follow the circle. Breathe in... and out.</p>
-        <div class="breathing-circle"></div>
-        <button onclick="goToPage('main-page')">BACK</button>
-      </div>
+  <div id="breathing-page" class="page">
+    <div id="hud">
+      <h1>BREATHING PROTOCOL</h1>
+      <p>Follow the circle. Breathe in... and out.</p>
+      <div class="breathing-circle"></div>
+      <button onclick="goToPage('main-page')">BACK</button>
     </div>
+  </div>
 
-    <div id="audio-page" class="page">
-      <div id="hud">
-        <h1>AUDIO COMFORT MODE</h1>
-        <p>Select one of Suemin's nerdy babbles:</p>
-        <button onclick="playAudio('audio1')">SUEMIN 1</button>
-        <button onclick="playAudio('audio2')">SUEMIN 2</button>
-        <button onclick="playAudio('audio3')">SUEMIN 3</button>
-        <button onclick="goToPage('main-page')">BACK</button>
-        <audio id="audio1" src="suemin1.mp3" preload="auto"></audio>
-        <audio id="audio2" src="suemin2.mp3" preload="auto"></audio>
-        <audio id="audio3" src="suemin3.mp3" preload="auto"></audio>
-      </div>
+  <div id="audio-page" class="page">
+    <div id="hud">
+      <h1>AUDIO COMFORT MODE</h1>
+      <p>Choose Suemin's voice logs:</p>
+      <button onclick="playAudio('audio1')">SUEMIN 1</button>
+      <button onclick="playAudio('audio2')">SUEMIN 2</button>
+      <button onclick="playAudio('audio3')">SUEMIN 3</button>
+      <input type="file" accept="image/gif" onchange="displayGif(event)" />
+      <img id="uploaded-gif" />
+      <button onclick="goToPage('main-page')">BACK</button>
+      <audio id="audio1" src="suemin1.mp3"></audio>
+      <audio id="audio2" src="suemin2.mp3"></audio>
+      <audio id="audio3" src="suemin3.mp3"></audio>
     </div>
+  </div>
 
-    <div id="panic-page" class="page">
-      <div id="hud">
-        <h1>PANIC RESPONSE ACTIVATED</h1>
-        <p class="panic-message" id="panic-message">Loading... Please wait.</p>
-        <button onclick="goToPage('main-page')">BACK</button>
-      </div>
+  <div id="panic-page" class="page">
+    <div id="hud">
+      <h1>PANIC RESPONSE ACTIVATED</h1>
+      <p class="panic-message" id="panic-message"></p>
+      <button onclick="goToPage('main-page')">BACK</button>
     </div>
+  </div>
 
-    <script>
-      const messages = [
-        "You are doing great!",
-        "I love you, Callan.",
-        "It's all going to be fine.",
-        "Take it one step at a time.",
-        "You're not alone in this.",
-        "Keep going, you're amazing.",
-        "You're strong, you got this.",
-        "Everything will be okay.",
-        "Stay calm, stay focused.",
-        "Breathe, and everything will fall into place.",
-        "I believe in you.",
-        "You're doing fantastic!",
-        "Take a deep breath, relax.",
-        "You're capable of handling this.",
-        "Trust yourself, you can do it."
-      ];
+  <div id="recovery-page" class="page">
+    <div id="hud">
+      <h1>RECOVERY TIMER</h1>
+      <p>Stabilizing... Stay with me, Callan 💚</p>
+      <div class="timer-bar"><div class="timer-progress" id="timer-progress"></div></div>
+      <p id="timer-status">60 seconds remaining</p>
+      <button onclick="goToPage('main-page')">BACK</button>
+    </div>
+  </div>
 
-      function goToPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-      }
+  <div id="grounding-page" class="page">
+    <div id="hud">
+      <h1>GROUNDING CHECKLIST</h1>
+      <div class="grounding-step">🖐 Name 5 things you can see</div>
+      <div class="grounding-step">👂 4 things you can hear</div>
+      <div class="grounding-step">👃 3 things you can smell or remember the smell of</div>
+      <div class="grounding-step">🤲 2 things you can touch</div>
+      <div class="grounding-step">💗 1 thing you love about yourself</div>
+      <button onclick="goToPage('main-page')">BACK</button>
+    </div>
+  </div>
 
-      function triggerPanic() {
-        goToPage('panic-page'); // 먼저 panic 페이지로 이동
+  <div id="log-page" class="page">
+    <div id="hud">
+      <h1>PANIC HISTORY LOG</h1>
+      <ul id="log-list"></ul>
+      <button onclick="goToPage('main-page')">BACK</button>
+    </div>
+  </div>
 
-        setTimeout(() => {
-          const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-          document.getElementById("panic-message").textContent = randomMessage;
+  <script>
+    const messages = [
+      "You are doing great!",
+      "I love you, Callan.",
+      "Suemin is proud of you.",
+      "Suemin loves you so much.",
+      "You're not alone.",
+      "You're stronger than you think.",
+      "Just breathe, love.",
+      "Your brain is safe right now.",
+      "This too shall pass.",
+      "Halo warriors never panic, they adapt.",
+      "You’re doing fantastic.",
+      "Trust Suemin, you’re okay.",
+      "❤️ You are loved by Suemin."
+      // Add more up to 40 later
+    ];
 
-          alert("Panic detected. Activating calming protocol... 🛡️");
-          document.body.style.backgroundImage = "radial-gradient(#0d1117, #1a1a1a)";
-        }, 100);
-      }
+    function goToPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
 
-      function playAudio(id) {
-        document.querySelectorAll('audio').forEach(audio => audio.pause());
-        const selected = document.getElementById(id);
-        selected.currentTime = 0;
-        selected.play();
-      }
-    </script>
-  </body>
+    function triggerPanic() {
+      const message = messages[Math.floor(Math.random() * messages.length)];
+      document.getElementById("panic-message").textContent = message;
+      goToPage('panic-page');
+      saveToLog();
+    }
+
+    function playAudio(id) {
+      document.querySelectorAll('audio').forEach(audio => audio.pause());
+      const selected = document.getElementById(id);
+      selected.currentTime = 0;
+      selected.play();
+    }
+
+    function displayGif(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('uploaded-gif').src = e.target.result;
+      };
+      if (file) reader.readAsDataURL(file);
+    }
+
+    function saveToLog() {
+      const now = new Date().toLocaleString();
+      const log = JSON.parse(localStorage.getItem("panicLog") || "[]");
+      log.push(now);
+      localStorage.setItem("panicLog", JSON.stringify(log));
+      updateLog();
+    }
+
+    function updateLog() {
+      const logList = document.getElementById("log-list");
+      const log = JSON.parse(localStorage.getItem("panicLog") || "[]");
+      logList.innerHTML = log.map(item => `<li>${item}</li>`).join('');
+    }
+
+    function startRecoveryTimer() {
+      let duration = 60;
+      const progressBar = document.getElementById("timer-progress");
+      const status = document.getElementById("timer-status");
+      progressBar.style.width = "0%";
+      const interval = setInterval(() => {
+        duration--;
+        progressBar.style.width = `${(60 - duration) / 60 * 100}%`;
+        status.textContent = `${duration} seconds remaining`;
+        if (duration <= 0) {
+          clearInterval(interval);
+          status.textContent = "Stabilization complete 💚";
+        }
+      }, 1000);
+    }
+
+    document.getElementById("recovery-page").addEventListener("click", startRecoveryTimer);
+    window.onload = updateLog;
+  </script>
+</body>
 </html>
