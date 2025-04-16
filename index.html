@@ -63,6 +63,27 @@
         outline: none;
       }
 
+      .hyrax {
+        width: 48px;
+        height: 48px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        image-rendering: pixelated;
+        display: none; /* Initially hidden */
+      }
+
+      .helmet-ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('https://i.imgur.com/2nXbtjl.png') center/cover no-repeat;
+        opacity: 0.1;
+        pointer-events: none;
+      }
+
       .page {
         display: none;
       }
@@ -92,49 +113,19 @@
         margin-top: 20px;
         font-family: 'Press Start 2P', cursive;
       }
-
-      .record-log {
-        margin-top: 20px;
-        background-color: rgba(0, 255, 153, 0.2);
-        padding: 20px;
-        max-height: 300px;
-        overflow-y: auto;
-        border-radius: 10px;
-      }
-
-      .record-log p {
-        font-size: 14px;
-        line-height: 1.5;
-      }
-
-      .grounding-checklist {
-        margin: 20px;
-        font-size: 14px;
-        text-align: left;
-        color: #7fffd4;
-      }
-
-      .settings {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        margin-top: 40px;
-      }
     </style>
   </head>
   <body>
+    <div class="helmet-ui"></div>
+
     <div id="main-page" class="page active">
       <div id="hud">
         <h1>STABLE CONSOLE</h1>
+        <img src="https://i.imgur.com/WAE3Ywi.png" class="hyrax" alt="Hyrax" id="hyrax-icon" />
         <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
         <button onclick="goToPage('breathing-page')">START BREATHING</button>
         <button onclick="goToPage('panic-page')">PANIC BUTTON</button>
         <button onclick="goToPage('audio-page')">AUDIO MODE</button>
-        <button onclick="goToPage('log-page')">PANIC HISTORY LOG</button>
-        <button onclick="goToPage('settings-page')">SETTINGS</button>
-        <button onclick="goToPage('grounding-page')">MINI GROUNDING CHECKLIST</button>
-        <button onclick="goToPage('game-page')">MINI GAME</button>
       </div>
     </div>
 
@@ -164,104 +155,68 @@
     <div id="panic-page" class="page">
       <div id="hud">
         <h1>PANIC RESPONSE ACTIVATED</h1>
+        <img src="https://i.imgur.com/WAE3Ywi.png" class="hyrax" alt="Hyrax" />
         <p class="panic-message" id="panic-message">Loading... Please wait.</p>
         <button onclick="goToPage('main-page')">BACK</button>
       </div>
     </div>
 
-    <div id="log-page" class="page">
-      <div id="hud">
-        <h1>PANIC HISTORY LOG</h1>
-        <p>This month's panic occurrences:</p>
-        <div id="panic-count">
-          <p>You survived 3 times of panic attacks, you are stronger than you think!</p>
-        </div>
-        <div class="record-log" id="panic-log">
-          <p>Loading log...</p>
-        </div>
-        <button onclick="resetLog()">RESET LOG</button>
-        <button onclick="goToPage('main-page')">BACK</button>
-      </div>
-    </div>
-
-    <div id="settings-page" class="page">
-      <div id="hud">
-        <h1>SETTINGS</h1>
-        <button onclick="goToPage('main-page')">BACK</button>
-        <div class="settings">
-          <button onclick="changeTheme('light')">LIGHT MODE</button>
-          <button onclick="changeTheme('dark')">DARK MODE</button>
-          <button onclick="changeFont('Press Start 2P')">Change Font: Press Start 2P</button>
-          <button onclick="changeColor('green')">Change Theme Color: Green</button>
-          <button onclick="changeColor('purple')">Change Theme Color: Purple</button>
-          <button onclick="changeColor('blue')">Change Theme Color: Blue</button>
-          <button onclick="changeColor('orange')">Change Theme Color: Orange</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="grounding-page" class="page">
-      <div id="hud">
-        <h1>MINI GROUNDING CHECKLIST</h1>
-        <div class="grounding-checklist">
-          <ol>
-            <li>5 things you can see</li>
-            <li>4 things you can touch</li>
-            <li>3 things you can hear</li>
-            <li>2 things you can smell</li>
-            <li>1 thing you can taste</li>
-          </ol>
-        </div>
-        <button onclick="goToPage('main-page')">BACK</button>
-      </div>
-    </div>
-
     <script>
-      function goToPage(page) {
-        const pages = document.querySelectorAll('.page');
-        pages.forEach(p => p.classList.remove('active'));
-        document.getElementById(page).classList.add('active');
+      const messages = [
+        "You are doing great!",
+        "I love you, Callan.",
+        "It's all going to be fine.",
+        "Take it one step at a time.",
+        "You're not alone in this.",
+        "Keep going, you're amazing.",
+        "You're strong, you got this.",
+        "Everything will be okay.",
+        "Stay calm, stay focused.",
+        "Breathe, and everything will fall into place.",
+        "I believe in you.",
+        "You're doing fantastic!",
+        "Take a deep breath, relax.",
+        "You're capable of handling this.",
+        "Trust yourself, you can do it.",
+        "You are doing great!",
+        "I love you, Callan.",
+        "Suemin is proud of you.",
+        "Suemin loves you so much.",
+        "You're not alone.",
+        "You're stronger than you think.",
+        "Just breathe, love.",
+        "Your brain is safe right now.",
+        "This too shall pass.",
+        "Spartans never panic, they adapt.",
+        "You’re doing fantastic.",
+        "Trust Suemin, you’re okay.",
+        "❤️ You are loved by Suemin."
+      ];
+
+      function goToPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
       }
 
-      function resetLog() {
-        const log = document.getElementById('panic-log');
-        log.innerHTML = "<p>Log has been reset.</p>";
+      function triggerPanic() {
+        document.getElementById("hyrax-icon").style.display = "block"; // Show Hyrax
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        document.getElementById("panic-message").textContent = randomMessage;
+        goToPage('panic-page'); // Navigate to Panic Page
+
+        alert("Panic detected. Activating calming protocol... 🛡️");
+        document.body.style.backgroundImage = "radial-gradient(#0d1117, #1a1a1a)";
       }
 
-      function playAudio(audioId) {
-        const audio = document.getElementById(audioId);
-        audio.play();
+      function playAudio(id) {
+        document.querySelectorAll('audio').forEach(audio => audio.pause());
+        const selected = document.getElementById(id);
+        selected.currentTime = 0;
+        selected.play();
       }
 
-      function changeTheme(theme) {
-        if (theme === 'light') {
-          document.body.style.backgroundColor = '#ffffff';
-          document.body.style.color = '#000000';
-        } else if (theme === 'dark') {
-          document.body.style.backgroundColor = '#0d1117';
-          document.body.style.color = '#00ff99';
-        }
-      }
-
-      function changeFont(font) {
-        document.body.style.fontFamily = font;
-      }
-
-      function changeColor(color) {
-        if (color === 'green') {
-          document.body.style.backgroundColor = '#0d1117';
-          document.body.style.color = '#00ff99';
-        } else if (color === 'purple') {
-          document.body.style.backgroundColor = '#1d0f4f';
-          document.body.style.color = '#a966ff';
-        } else if (color === 'blue') {
-          document.body.style.backgroundColor = '#0d1117';
-          document.body.style.color = '#66ccff';
-        } else if (color === 'orange') {
-          document.body.style.backgroundColor = '#1c1c1c';
-          document.body.style.color = '#ff6600';
-        }
-      }
+      // Initial Trigger (for testing)
+      // triggerPanic();
     </script>
   </body>
 </html>
