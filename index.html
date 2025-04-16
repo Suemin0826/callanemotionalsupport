@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Project Stable Console</title>
-    <!-- 픽셀 느낌 Halo-style font -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
     <style>
       body {
@@ -38,7 +37,7 @@
         display: block;
         font-size: 12px;
         cursor: pointer;
-        border-radius: 12px;
+        border-radius: 4px;
         box-shadow: 0 0 15px #00ff99;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
@@ -48,25 +47,10 @@
         box-shadow: 0 0 25px #00ff99;
       }
 
-      .breathing-circle {
-        width: 100px;
-        height: 100px;
-        border-radius: 50%;
-        margin: 40px auto;
-        background-color: #00ff99;
-        animation: breathe 6s ease-in-out infinite;
-      }
-
-      @keyframes breathe {
-        0% { transform: scale(1); opacity: 0.7; }
-        50% { transform: scale(1.5); opacity: 1; }
-        100% { transform: scale(1); opacity: 0.7; }
-      }
-
       #hud {
         padding: 40px;
         border: 2px solid #00ff99;
-        border-radius: 20px;
+        border-radius: 8px;
         max-width: 500px;
         margin: 40px auto;
         box-shadow: 0 0 20px #00ff99;
@@ -94,46 +78,88 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('https://i.imgur.com/2nXbtjl.png') center/cover no-repeat; /* Replace with Halo-like HUD overlay */
+        background: url('https://i.imgur.com/2nXbtjl.png') center/cover no-repeat;
         opacity: 0.1;
         pointer-events: none;
+      }
+
+      .page {
+        display: none;
+      }
+
+      .active {
+        display: block;
+      }
+
+      .breathing-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin: 40px auto;
+        background-color: #00ff99;
+        animation: breathe 6s ease-in-out infinite;
+      }
+
+      @keyframes breathe {
+        0% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.5); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.7; }
       }
     </style>
   </head>
   <body>
     <div class="helmet-ui"></div>
-    <div id="hud">
-      <h1>STABLE CONSOLE</h1>
-      <img src="https://i.imgur.com/Nh0Y7cG.png" class="hyrax" alt="Hyrax" />
-      <p>“IN THE MIDST OF CHAOS, YOU ARE SAFE HERE.”</p>
-      <div class="breathing-circle"></div>
-      <button onclick="startBreathing()">START BREATHING</button>
-      <button onclick="triggerPanic()">PANIC BUTTON</button>
-      <button onclick="toggleAudio()">AUDIO MODE</button>
-      <audio id="comfort-audio" src="your-audio-file.mp3" preload="auto"></audio>
+
+    <div id="main-page" class="page active">
+      <div id="hud">
+        <h1>STABLE CONSOLE</h1>
+        <img src="https://i.imgur.com/WAE3Ywi.png" class="hyrax" alt="Hyrax" />
+        <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
+        <button onclick="goToPage('breathing-page')">START BREATHING</button>
+        <button onclick="triggerPanic()">PANIC BUTTON</button>
+        <button onclick="goToPage('audio-page')">AUDIO MODE</button>
+      </div>
+    </div>
+
+    <div id="breathing-page" class="page">
+      <div id="hud">
+        <h1>BREATHING PROTOCOL</h1>
+        <p>Follow the circle. Breathe in... and out.</p>
+        <div class="breathing-circle"></div>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
+
+    <div id="audio-page" class="page">
+      <div id="hud">
+        <h1>AUDIO COMFORT MODE</h1>
+        <p>Select one of Suemin's nerdy babbles:</p>
+        <button onclick="playAudio('audio1')">SUEMIN 1</button>
+        <button onclick="playAudio('audio2')">SUEMIN 2</button>
+        <button onclick="playAudio('audio3')">SUEMIN 3</button>
+        <button onclick="goToPage('main-page')">BACK</button>
+        <audio id="audio1" src="suemin1.mp3" preload="auto"></audio>
+        <audio id="audio2" src="suemin2.mp3" preload="auto"></audio>
+        <audio id="audio3" src="suemin3.mp3" preload="auto"></audio>
+      </div>
     </div>
 
     <script>
-      function startBreathing() {
-        alert("Deep breath in... and out. You got this 💚");
+      function goToPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
       }
 
       function triggerPanic() {
         alert("Panic detected. Activating calming protocol... 🛡️");
         document.body.style.backgroundImage = "radial-gradient(#0d1117, #1a1a1a)";
-        const circle = document.querySelector(".breathing-circle");
-        circle.style.backgroundColor = "#7fffd4";
-        circle.style.boxShadow = "0 0 20px #7fffd4";
       }
 
-      function toggleAudio() {
-        const audio = document.getElementById("comfort-audio");
-        if (audio.paused) {
-          audio.play();
-          alert("Now playing: Shannon's soothing nerd babble 🎧");
-        } else {
-          audio.pause();
-        }
+      function playAudio(id) {
+        document.querySelectorAll('audio').forEach(audio => audio.pause());
+        const selected = document.getElementById(id);
+        selected.currentTime = 0;
+        selected.play();
       }
     </script>
   </body>
