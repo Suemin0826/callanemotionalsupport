@@ -10,7 +10,6 @@
         margin: 0;
         padding: 0;
         background-color: #0d1117;
-        background-image: radial-gradient(#0d1117, #000000);
         color: #00ff99;
         font-family: 'Press Start 2P', cursive;
         text-align: center;
@@ -33,30 +32,30 @@
         font-family: 'Press Start 2P', cursive;
         background-color: #00ff99;
         color: #0d1117;
-        border: none;
+        border: 2px solid #00ff99;  /* Pixel-style border */
         padding: 20px;
         margin: 10px auto;
         display: block;
         font-size: 12px;
         cursor: pointer;
         border-radius: 4px;
-        box-shadow: 0 0 15px #00ff99;
+        box-shadow: 0 0 5px #00ff99;
         transition: transform 0.2s ease, box-shadow 0.2s ease;
         width: 80%;
       }
 
       button:hover {
         transform: scale(1.1);
-        box-shadow: 0 0 25px #00ff99;
+        box-shadow: 0 0 10px #00ff99;
       }
 
       #hud {
         padding: 40px;
-        border: 2px solid #00ff99;
+        border: 2px solid #00ff99; /* Pixel-style border */
         border-radius: 8px;
         max-width: 600px;
         margin: 40px auto;
-        box-shadow: 0 0 20px #00ff99;
+        box-shadow: 0 0 15px #00ff99;
         background-color: rgba(13, 17, 23, 0.85);
         position: relative;
       }
@@ -138,6 +137,7 @@
         <button onclick="goToPage('log-page')">View Panic Log</button>
         <div class="breathing-circle"></div>
         <p id="panic-message"></p>
+        <button onclick="startTimer()">Start Timer</button>
         <button onclick="goToPage('settings-page')">Settings</button>
       </div>
 
@@ -164,7 +164,7 @@
     <script>
       let panicCount = parseInt(localStorage.getItem('panicCount')) || 0;
       let panicLog = JSON.parse(localStorage.getItem('panicLog')) || [];
-      const audios = document.querySelectorAll('audio');
+      let timerInterval;
 
       function goToPage(page) {
         const pages = document.querySelectorAll('.page');
@@ -198,11 +198,18 @@
         updateLogDisplay();
       }
 
-      function playAudio(audioId) {
-        audios.forEach(a => a.pause());
-        const audio = document.getElementById(audioId);
-        audio.currentTime = 0;
-        audio.play();
+      function startTimer() {
+        let timer = 60; // Set timer duration to 60 seconds for example
+        const timerDisplay = document.getElementById('panic-message');
+        timerInterval = setInterval(function() {
+          timer--;
+          if (timer <= 0) {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = "Time's up!";
+          } else {
+            timerDisplay.textContent = `Time left: ${timer}s`;
+          }
+        }, 1000);
       }
 
       function randomMessage() {
