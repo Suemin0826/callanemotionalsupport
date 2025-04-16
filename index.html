@@ -133,14 +133,23 @@
   <body>
     <div id="hud">
       <h1>Project Stable Console</h1>
+
+      <!-- Panic Page -->
       <div id="panic-page" class="page active">
         <button onclick="goToPage('log-page')">View Panic Log</button>
         <div class="breathing-circle"></div>
-        <p id="panic-message"></p>
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="goToPage('settings-page')">Settings</button>
       </div>
 
+      <!-- Timer Page -->
+      <div id="timer-page" class="page">
+        <button onclick="goToPage('panic-page')">Back to Panic Page</button>
+        <div class="timer" id="timer-display">Time left: 60</div>
+        <button onclick="stopTimer()">Stop Timer</button>
+      </div>
+
+      <!-- Panic Log Page -->
       <div id="log-page" class="page">
         <button onclick="goToPage('panic-page')">Back to Panic Page</button>
         <div class="record-log" id="panic-log"></div>
@@ -148,6 +157,7 @@
         <button onclick="resetLog()">Reset Log</button>
       </div>
 
+      <!-- Settings Page -->
       <div id="settings-page" class="page">
         <button onclick="goToPage('panic-page')">Back to Panic Page</button>
         <div class="settings">
@@ -173,7 +183,7 @@
         if (page === 'panic-page') recordPanic();
         if (page === 'log-page') updateLogDisplay();
         if (page === 'settings-page') loadTheme();
-        randomMessage();
+        if (page === 'timer-page') randomMessage();
       }
 
       function recordPanic() {
@@ -199,8 +209,8 @@
       }
 
       function startTimer() {
-        let timer = 60; // Set timer duration to 60 seconds for example
-        const timerDisplay = document.getElementById('panic-message');
+        let timer = 60; 
+        const timerDisplay = document.getElementById('timer-display');
         timerInterval = setInterval(function() {
           timer--;
           if (timer <= 0) {
@@ -210,6 +220,11 @@
             timerDisplay.textContent = `Time left: ${timer}s`;
           }
         }, 1000);
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+        document.getElementById('timer-display').textContent = "Timer stopped.";
       }
 
       function randomMessage() {
@@ -224,7 +239,7 @@
           "❤️ You are loved by Suemin.",
         ];
         const msg = messages[Math.floor(Math.random() * messages.length)];
-        const el = document.getElementById('panic-message');
+        const el = document.querySelector('.panic-message');
         if (el) el.textContent = msg;
       }
 
@@ -248,8 +263,10 @@
           orange: '#ff6600'
         };
         const selected = colorMap[color];
-        document.body.style.color = selected;
-        buttons.forEach(btn => btn.style.backgroundColor = selected);
+        buttons.forEach(btn => {
+          btn.style.backgroundColor = selected;
+          btn.style.borderColor = selected;
+        });
         localStorage.setItem('color', selected);
       }
 
