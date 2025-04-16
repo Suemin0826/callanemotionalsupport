@@ -132,7 +132,34 @@
     </style>
   </head>
   <body>
-    <!-- HTML content same as before, excluded here for brevity -->
+    <div id="hud">
+      <h1>Project Stable Console</h1>
+      <div id="panic-page" class="page active">
+        <button onclick="goToPage('log-page')">View Panic Log</button>
+        <div class="breathing-circle"></div>
+        <p id="panic-message"></p>
+        <button onclick="goToPage('settings-page')">Settings</button>
+      </div>
+
+      <div id="log-page" class="page">
+        <button onclick="goToPage('panic-page')">Back to Panic Page</button>
+        <div class="record-log" id="panic-log"></div>
+        <p id="panic-counter">Total Panic Button Presses: 0</p>
+        <button onclick="resetLog()">Reset Log</button>
+      </div>
+
+      <div id="settings-page" class="page">
+        <button onclick="goToPage('panic-page')">Back to Panic Page</button>
+        <div class="settings">
+          <button onclick="changeTheme('light')">Light Mode</button>
+          <button onclick="changeTheme('dark')">Dark Mode</button>
+          <button onclick="changeColor('green')">Green</button>
+          <button onclick="changeColor('purple')">Purple</button>
+          <button onclick="changeColor('blue')">Blue</button>
+          <button onclick="changeColor('orange')">Orange</button>
+        </div>
+      </div>
+    </div>
 
     <script>
       let panicCount = parseInt(localStorage.getItem('panicCount')) || 0;
