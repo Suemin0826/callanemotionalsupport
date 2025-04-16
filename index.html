@@ -124,7 +124,7 @@
         <img src="https://i.imgur.com/WAE3Ywi.png" class="hyrax" alt="Hyrax" id="hyrax-icon" />
         <p>"IN THE MIDST OF CHAOS, YOU ARE SAFE HERE."</p>
         <button onclick="goToPage('breathing-page')">START BREATHING</button>
-        <button onclick="triggerPanic()">PANIC BUTTON</button>
+        <button onclick="goToPage('panic-page')">PANIC BUTTON</button>
         <button onclick="goToPage('audio-page')">AUDIO MODE</button>
       </div>
     </div>
@@ -152,6 +152,15 @@
       </div>
     </div>
 
+    <div id="panic-page" class="page">
+      <div id="hud">
+        <h1>PANIC RESPONSE ACTIVATED</h1>
+        <img src="https://i.imgur.com/WAE3Ywi.png" class="hyrax" alt="Hyrax" />
+        <p class="panic-message" id="panic-message">Loading... Please wait.</p>
+        <button onclick="goToPage('main-page')">BACK</button>
+      </div>
+    </div>
+
     <script>
       const messages = [
         "You are doing great!",
@@ -168,32 +177,52 @@
         "You're doing fantastic!",
         "Take a deep breath, relax.",
         "You're capable of handling this.",
-        "Trust yourself, you can do it."
+        "Trust yourself, you can do it.",
+        "Courage is not the absence of fear, but the ability to face it.",
+        "The only way out is through.",
+        "This moment will pass.",
+        "You are not defined by this moment.",
+        "Your strength is greater than any challenge.",
+        "Keep going, one breath at a time.",
+        "You’re tougher than you think.",
+        "Stay grounded, stay present.",
+        "You're doing better than you realize.",
+        "The storm will pass, and you’ll be stronger.",
+        "You’ve survived 100% of your worst days.",
+        "Take a break, you’ve earned it.",
+        "I’m proud of you.",
+        "This is just a step in your journey.",
+        "You can conquer this.",
+        "Halo: “We are the Spartan-IIs. We were made for this.”",
+        "Master Chief: “Finish the fight.”",
+        "Cortana: “I’m sorry, Chief. I won’t be coming back.”",
+        "We’re all in this together.",
+        "You’re a soldier, and soldiers never quit.",
+        "Keep pushing forward, no matter the cost.",
+        "This is not the end. It’s just the beginning.",
+        "Trust in your team. Trust in yourself.",
+        "You are the hero in your own story.",
+        "The fight isn’t over until you say it’s over.",
+        "The mission comes first. Always.",
+        "You are the master of your fate.",
+        "Life is a series of choices. Choose wisely.",
+        "Your destiny is in your hands.",
+        "The enemy is relentless, but so are you.",
+        "When you fall, get back up. Every time.",
+        "You’ve got this. You’re unstoppable.",
+        "Like the Chief, you have the strength to rise again.",
+        "Even in the darkest times, hope remains.",
+        "No battle is too great for you.",
+        "You’re a warrior. Keep fighting.",
+        "The universe needs you to be strong.",
+        "You are more than capable of handling this.",
+        "You are the shield against your own storm.",
+        "This challenge will make you stronger.",
+        "No one can break your will unless you let them.",
+        "Keep your focus and stay calm.",
+        "Victory will come when you least expect it."
       ];
 
       function goToPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-      }
-
-      function triggerPanic() {
-        document.getElementById("hyrax-icon").style.display = "block"; // Show Hyrax
-        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('panic-message');
-        messageElement.textContent = randomMessage;
-        document.getElementById("main-page").appendChild(messageElement);
-
-        alert("Panic detected. Activating calming protocol... 🛡️");
-        document.body.style.backgroundImage = "radial-gradient(#0d1117, #1a1a1a)";
-      }
-
-      function playAudio(id) {
-        document.querySelectorAll('audio').forEach(audio => audio.pause());
-        const selected = document.getElementById(id);
-        selected.currentTime = 0;
-        selected.play();
-      }
-    </script>
-  </body>
-</html>
+        document.getElementById(id).classList
