@@ -315,75 +315,78 @@
         }, 1000);
       }
       
-      const audioData = [
-        { file: 'audio/Startrek.m4a', name: 'Audio 1' },
-        { file: 'audio/Monet.m4a', name: 'Audio 2' },
-        { file: 'audio/Matcha.m4a', name: 'Audio 3' },
-      ];
+      const audioFiles = [
+    { title: "Audio 1 🎤", src: "audio/Startrek.m4a" },
+    { title: "Audio 2 🎧", src: "audio/Monet.m4a" },
+    { title: "Audio 3 🎶", src: "audio/Matcha.m4a" }
+  ];
 
-      function renderAudioControls() {
-        const container = document.getElementById("audio-section");
-        container.innerHTML = "";
+  const audioPlayers = [];
 
-        audioData.forEach((audio, index) => {
-          const wrapper = document.createElement("div");
+  function renderAudioControls() {
+    const container = document.getElementById("audio-section");
+    container.innerHTML = "";
 
-          const titleBtn = document.createElement("button");
-          titleBtn.textContent = audio.name;
-          titleBtn.className = "audio-button";
+    audioFiles.forEach((audio, index) => {
+      const wrapper = document.createElement("div");
 
-          const stopBtn = document.createElement("button");
-          stopBtn.textContent = "⏸️";
-          stopBtn.className = "audio-button";
-          stopBtn.style.backgroundColor = "#ffe29a";
+      const titleBtn = document.createElement("button");
+      titleBtn.textContent = audio.title;
+      titleBtn.className = "audio-button";
 
-          const resetBtn = document.createElement("button");
-          resetBtn.textContent = "⏹️";
-          resetBtn.className = "audio-button";
-          resetBtn.style.backgroundColor = "#c4f0ff";
+      const stopBtn = document.createElement("button");
+      stopBtn.textContent = "⏸️";
+      stopBtn.className = "audio-button";
+      stopBtn.style.backgroundColor = "#ffe29a";
 
-          const progressWrapper = document.createElement("div");
-          progressWrapper.className = "progress-wrapper";
+      const resetBtn = document.createElement("button");
+      resetBtn.textContent = "⏹️";
+      resetBtn.className = "audio-button";
+      resetBtn.style.backgroundColor = "#c4f0ff";
 
-          const progress = document.createElement("div");
-          progress.className = "audio-progress";
-          progressWrapper.appendChild(progress);
+      const progressWrapper = document.createElement("div");
+      progressWrapper.className = "progress-wrapper";
 
-          const audioElement = new Audio(audio.file);
+      const progress = document.createElement("div");
+      progress.className = "audio-progress";
+      progressWrapper.appendChild(progress);
 
-          titleBtn.onclick = () => {
-            audioData.forEach((a, i) => {
-              if (i !== index && a.audioElem) a.audioElem.pause();
-            });
-            audioElement.play();
-          };
+      const audioElement = new Audio(audio.src);
+      audioPlayers.push(audioElement);
 
-          stopBtn.onclick = () => {
-            audioElement.pause();
-          };
-
-          resetBtn.onclick = () => {
-            audioElement.pause();
-            audioElement.currentTime = 0;
-            progress.style.width = "0%";
-          };
-
-          audioElement.addEventListener("timeupdate", () => {
-            const percent = (audioElement.currentTime / audioElement.duration) * 100;
-            progress.style.width = percent + "%";
-          });
-
-          const controlBar = document.createElement("div");
-          controlBar.className = "audio-controls";
-          controlBar.appendChild(titleBtn);
-          controlBar.appendChild(stopBtn);
-          controlBar.appendChild(resetBtn);
-
-          wrapper.appendChild(controlBar);
-          wrapper.appendChild(progressWrapper);
-          container.appendChild(wrapper);
+      titleBtn.onclick = () => {
+        audioPlayers.forEach((a, i) => {
+          if (i !== index) a.pause();
         });
-      }
+        audioElement.play();
+      };
+
+      stopBtn.onclick = () => {
+        audioElement.pause();
+      };
+
+      resetBtn.onclick = () => {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+        progress.style.width = "0%";
+      };
+
+      audioElement.addEventListener("timeupdate", () => {
+        const percent = (audioElement.currentTime / audioElement.duration) * 100;
+        progress.style.width = percent + "%";
+      });
+
+      const controlBar = document.createElement("div");
+      controlBar.className = "audio-controls";
+      controlBar.appendChild(titleBtn);
+      controlBar.appendChild(stopBtn);
+      controlBar.appendChild(resetBtn);
+
+      wrapper.appendChild(controlBar);
+      wrapper.appendChild(progressWrapper);
+      container.appendChild(wrapper);
+    });
+  }
 
       const loveLines = [
        "You're my safe zone, Callan 🛡️",
