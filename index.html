@@ -133,6 +133,26 @@
         border: 2px solid var(--accent-dark);
         display: inline-block;
       }
+    .breathing-circle {
+      width: 150px;
+      height: 150px;
+      margin: 30px auto;
+      border-radius: 50%;
+      background-color: var(--accent);
+      animation: breathe 6s infinite;
+    }
+
+    @keyframes breathe {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.1);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
     </style>
   </head>
   <body>
@@ -431,28 +451,5 @@
         renderAudioControls();
       };
     </script>
-    
-    <style>
-    .breathing-circle {
-      width: 150px;
-      height: 150px;
-      margin: 30px auto;
-      border-radius: 50%;
-      background-color: var(--accent);
-      animation: breathe 6s infinite;
-    }
-
-    @keyframes breathe {
-      0% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-      }
-    }
-  </style>
   </body>
 </html>
