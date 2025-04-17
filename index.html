@@ -1,254 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Project Stable Console</title>
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --main-color: #a8e6cf;
-      --accent-color: #dcedc1;
-      --text-color: #333;
-      --button-color: #b2f2bb;
-      --button-hover: #9ae6a0;
-      --border-color: #c1f7c7;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Quicksand', sans-serif;
-      background-color: var(--main-color);
-      color: var(--text-color);
-      text-align: center;
-      overflow-y: auto;
-      height: 100vh;
-    }
-
-    h1 {
-      margin-top: 40px;
-      font-size: 24px;
-    }
-
-    p {
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
-
-    button {
-      font-family: 'Quicksand', sans-serif;
-      background-color: var(--button-color);
-      color: var(--text-color);
-      border: 2px solid var(--border-color);
-      padding: 15px 20px;
-      margin: 8px auto;
-      display: block;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 16px;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-      transition: all 0.2s ease;
-      width: 80%;
-    }
-
-    button:hover {
-      background-color: var(--button-hover);
-      transform: scale(1.05);
-    }
-
-    #hud {
-      padding: 30px;
-      border: 2px solid var(--border-color);
-      border-radius: 24px;
-      max-width: 600px;
-      margin: 40px auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      background-color: var(--accent-color);
-    }
-
-    .page {
-      display: none;
-    }
-
-    .active {
-      display: block;
-    }
-
-    .breathing-circle {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      margin: 30px auto;
-      background-color: var(--button-hover);
-      animation: breathe 6s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-      0% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.5); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.8; }
-    }
-
-    .panic-message {
-      font-size: 16px;
-      margin-top: 20px;
-    }
-
-    .record-log {
-      margin-top: 20px;
-      background-color: #f0fff4;
-      padding: 20px;
-      max-height: 300px;
-      overflow-y: auto;
-      border-radius: 12px;
-      text-align: left;
-    }
-
-    .grounding-checklist {
-      margin: 20px;
-      font-size: 16px;
-      text-align: left;
-    }
-
-    .settings {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-  </style>
-</head>
-<body>
-  <div id="main-page" class="page active">
-    <div id="hud">
-      <h1>🌿 STABLE CONSOLE 🌿</h1>
-      <p>"In the midst of chaos, you are safe here. ☁️"</p>
-      <button onclick="goToPage('breathing-page')">🌬️ Start Breathing</button>
-      <button onclick="goToPage('panic-page')">🚨 Panic Button</button>
-      <button onclick="goToPage('audio-page')">🎧 Audio Mode</button>
-      <button onclick="goToPage('log-page')">📜 Panic History Log</button>
-      <button onclick="goToPage('grounding-page')">🌱 Grounding Checklist</button>
-      <button onclick="goToPage('settings-page')">⚙️ Settings</button>
-    </div>
-  </div>
-
-  <div id="breathing-page" class="page">
-    <div id="hud">
-      <h1>🌬️ Breathing Protocol</h1>
-      <p>Follow the circle. Inhale... and exhale.</p>
-      <div class="breathing-circle"></div>
-      <button onclick="goToPage('main-page')">🔙 Back</button>
-    </div>
-  </div>
-
-  <div id="audio-page" class="page">
-    <div id="hud">
-      <h1>🎧 Audio Comfort Mode</h1>
-      <p>Select one of Suemin's nerdy babbles:</p>
-      <button onclick="playAudio('audio1')">💬 Suemin 1</button>
-      <button onclick="playAudio('audio2')">💬 Suemin 2</button>
-      <button onclick="playAudio('audio3')">💬 Suemin 3</button>
-      <button onclick="goToPage('main-page')">🔙 Back</button>
-      <audio id="audio1" src="suemin1.mp3" preload="auto"></audio>
-      <audio id="audio2" src="suemin2.mp3" preload="auto"></audio>
-      <audio id="audio3" src="suemin3.mp3" preload="auto"></audio>
-    </div>
-  </div>
-
-  <div id="panic-page" class="page">
-    <div id="hud">
-      <h1>🚨 Panic Response Activated</h1>
-      <p class="panic-message" id="panic-message">Loading... Please wait.</p>
-      <button onclick="goToPage('main-page')">🔙 Back</button>
-    </div>
-  </div>
-
-  <div id="log-page" class="page">
-    <div id="hud">
-      <h1>📜 Panic History Log</h1>
-      <p>This month's panic occurrences:</p>
-      <div id="panic-count">
-        <p>💪 You survived 3 panic attacks. You're stronger than you think!</p>
-      </div>
-      <div class="record-log" id="panic-log">
-        <p>Loading log...</p>
-      </div>
-      <button onclick="resetLog()">🧹 Reset Log</button>
-      <button onclick="goToPage('main-page')">🔙 Back</button>
-    </div>
-  </div>
-
-  <div id="grounding-page" class="page">
-    <div id="hud">
-      <h1>🌱 Grounding Checklist</h1>
-      <div class="grounding-checklist">
-        <ol>
-          <li>👀 5 things you can see</li>
-          <li>🤲 4 things you can touch</li>
-          <li>👂 3 things you can hear</li>
-          <li>👃 2 things you can smell</li>
-          <li>👅 1 thing you can taste</li>
-        </ol>
-      </div>
-      <button onclick="goToPage('main-page')">🔙 Back</button>
-    </div>
-  </div>
-
-  <div id="settings-page" class="page">
-    <div id="hud">
-      <h1>⚙️ Settings</h1>
-      <div class="settings">
-        <button onclick="changeTheme('light')">☀️ Light Mode</button>
-        <button onclick="changeTheme('dark')">🌙 Dark Mode</button>
-        <button onclick="goToPage('main-page')">🔙 Back</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    function goToPage(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(page).classList.add('active');
-    }
-
-    function resetLog() {
-      const log = document.getElementById('panic-log');
-      log.innerHTML = "<p>✨ Log has been reset ✨</p>";
-    }
-
-    function playAudio(audioId) {
-      const audio = document.getElementById(audioId);
-      audio.play();
-    }
-
-    function changeTheme(theme) {
-      if (theme === 'light') {
-        document.documentElement.style.setProperty('--main-color', '#ffffff');
-        document.documentElement.style.setProperty('--accent-color', '#f8f9fa');
-        document.documentElement.style.setProperty('--text-color', '#222');
-      } else {
-        document.documentElement.style.setProperty('--main-color', '#a8e6cf');
-        document.documentElement.style.setProperty('--accent-color', '#dcedc1');
-        document.documentElement.style.setProperty('--text-color', '#333');
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Stable Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --accent: #a5e1c3;
+        --accent-dark: #78c2a8;
+        --background: #fffef6;
+        --text: #222;
+        --hud-bg: #eafaf1;
       }
-    }
 
-    const messages = [
-      "🫶 Stay calm, you are doing great!",
-      "🌬️ Take a deep breath, you are in control.",
-      "💖 You’ve got this, breathe slowly.",
-      "🕊️ Relax, everything will be okay.",
-      "🌸 Focus on your breath, you’re safe here."
-    ];
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--background);
+        color: var(--text);
+        font-family: 'Pixelify Sans', sans-serif;
+        text-align: center;
+      }
 
-    function randomMessage() {
-      const message = messages[Math.floor(Math.random() * messages.length)];
-      document.getElementById('panic-message').textContent = message;
-    }
+      h1 {
+        margin-top: 40px;
+        font-size: 24px;
+      }
 
-    randomMessage();
-  </script>
-</body>
+      p {
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        font-family: 'Pixelify Sans', sans-serif;
+        background-color: var(--accent);
+        color: var(--text);
+        border: 2px solid var(--accent-dark);
+        padding: 15px 20px;
+        margin: 10px auto;
+        display: block;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 0;
+        box-shadow: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        width: 80%;
+        max-width: 300px;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: inset 0 0 0 2px var(--accent-dark);
+      }
+
+      #hud {
+        padding: 30px;
+        border: 2px solid var(--accent-dark);
+        border-radius: 0;
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: var(--hud-bg);
+        box-shadow: none;
+      }
+
+      .page {
+        display: none;
+      }
+
+      .active {
+        display: block;
+      }
+
+      .breathing-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 30px auto;
+        background-color: var(--accent);
+        animation: breathe 6s ease-in-out infinite;
+      }
+
+      @keyframes breathe {
+        0% { transform: scale(1); opacity: 0.6; }
+        50% { transform: scale(1.5); opacity: 1; }
+        100% { transform: scale(1); opacity: 0.6; }
+      }
+
+      #timer-display {
+        font-size: 18px;
+        margin: 10px 0;
+        font-weight: bold;
+      }
+
+      .record-log {
+        background-color: #f3fef6;
+        padding: 15px;
+        border: 2px solid var(--accent-dark);
+        border-radius: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        font-size: 12px;
+        margin: 10px auto;
+      }
+
+      .audio-button {
+        background-color: #ffb6b9;
+      }
+
+      .audio-button:hover {
+        transform: translateY(-2px);
+        box-shadow: inset 0 0 0 2px #ff8b8d;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main-page" class="page active">
+      <div id="hud">
+        <h1>🌿 STABLE CONSOLE 🌿</h1>
+        <p>"In the midst of chaos, you are safe here."</p>
+        <button onclick="goToPage('breathing-page')">START BREATHING 🌬️</button>
+        <button onclick="triggerPanic()">PANIC BUTTON 🚨</button>
+        <button onclick="goToPage('log-page')">PANIC LOG 📜</button>
+        <button onclick="goToPage('audio-page')">Suemin's Yapp 🎙️</button>
+      </div>
+    </div>
+
+    <div id="breathing-page" class="page">
+      <div id="hud">
+        <h1>🫧 BREATHING 🫧</h1>
+        <div class="breathing-circle"></div>
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
+      </div>
+    </div>
+
+    <div id="panic-page" class="page">
+      <div id="hud">
+        <h1>🚨 PANIC MODE 🚨</h1>
+        <p id="panic-message">Preparing support message...</p>
+        <img id="panic-gif" src="" alt="calming gif" style="max-width: 200px; display: block; margin: 20px auto;">
+        <div id="timer-display"></div>
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
+      </div>
+    </div>
+
+    <div id="log-page" class="page">
+      <div id="hud">
+        <h1>📜 PANIC HISTORY</h1>
+        <div id="panic-log" class="record-log"></div>
+        <button onclick="clearLog()">RESET LOG ❌</button>
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
+      </div>
+    </div>
+
+    <div id="audio-page" class="page">
+      <div id="hud">
+        <h1>🎙️ Suemin's Yapp 🎶</h1>
+        <p>Select an audio to play:</p>
+        <button class="audio-button" onclick="playAudio(1)">Audio 1 🎤</button>
+        <button class="audio-button" onclick="playAudio(2)">Audio 2 🎧</button>
+        <button class="audio-button" onclick="playAudio(3)">Audio 3 🎶</button>
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
+      </div>
+    </div>
+
+    <script>
+      const messages = [
+        "You’ve got this 💪",
+        "Breathe slowly 🫁",
+        "You are not alone 🌟",
+        "Let it pass gently 💧",
+        "This will end soon ☁️"
+      ];
+
+      const gifs = [
+        "https://i.imgur.com/yyfvI8u.gif"
+      ];
+
+      function goToPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      }
+
+      function triggerPanic() {
+        goToPage('panic-page');
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        const gif = gifs[Math.floor(Math.random() * gifs.length)];
+
+        document.getElementById('panic-message').textContent = message;
+        document.getElementById('panic-gif').src = gif;
+        startTimer(60);
+
+        const now = new Date();
+        const log = document.getElementById('panic-log');
+        const entry = document.createElement('p');
+        entry.textContent = `Panic button pressed at ${now.toLocaleString()}`;
+        log.appendChild(entry);
+
+        localStorage.setItem('panic-log', log.innerHTML);
+      }
+
+      function clearLog() {
+        localStorage.removeItem('panic-log');
+        document.getElementById('panic-log').innerHTML = '';
+      }
+
+      function loadLog() {
+        const stored = localStorage.getItem('panic-log');
+        if (stored) document.getElementById('panic-log').innerHTML = stored;
+      }
+
+      function startTimer(seconds) {
+        const display = document.getElementById('timer-display');
+        let remaining = seconds;
+        display.textContent = `⏱️ ${remaining} seconds`;
+
+        const interval = setInterval(() => {
+          remaining--;
+          display.textContent = `⏱️ ${remaining} seconds`;
+          if (remaining <= 0) {
+            clearInterval(interval);
+            display.textContent = "All done. You’re okay now 🌤️";
+          }
+        }, 1000);
+      }
+
+      function playAudio(audioNumber) {
+        const audioFiles = [
+          "audio1.mp3", // Add actual audio file paths
+          "audio2.mp3",
+          "audio3.mp3"
+        ];
+
+        const audio = new Audio(audioFiles[audioNumber - 1]);
+        audio.play();
+      }
+
+      loadLog();
+    </script>
+  </body>
 </html>
