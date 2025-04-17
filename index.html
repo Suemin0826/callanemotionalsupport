@@ -202,41 +202,15 @@
       </div>
     </div>
     
-  <div id="audio-page" class="page">
+ <div id="audio-page" class="page">
   <div id="hud">
     <h1>🎙️ Suemin's Yapp 🎶</h1>
     <p>Select an audio to play:</p>
-    
-    <!-- Audio 1 -->
-    <div class="audio-container">
-      <button class="audio-button" onclick="playAudio(1)">Audio 1 🎤</button>
-      <button class="audio-button" onclick="stopAudio(1)">⏸️ Stop</button>
-      <button class="audio-button" onclick="resetAudio(1)">⏹️ Reset</button>
-      <div class="progress-wrapper">
-        <div class="audio-progress" id="progress-1"></div>
-      </div>
+
+    <div id="audio-section">
+      <!-- 오디오 항목들은 JS로 생성됨 -->
     </div>
 
-    <!-- Audio 2 -->
-    <div class="audio-container">
-      <button class="audio-button" onclick="playAudio(2)">Audio 2 🎧</button>
-      <button class="audio-button" onclick="stopAudio(2)">⏸️ Stop</button>
-      <button class="audio-button" onclick="resetAudio(2)">⏹️ Reset</button>
-      <div class="progress-wrapper">
-        <div class="audio-progress" id="progress-2"></div>
-      </div>
-    </div>
-
-    <!-- Audio 3 -->
-    <div class="audio-container">
-      <button class="audio-button" onclick="playAudio(3)">Audio 3 🎶</button>
-      <button class="audio-button" onclick="stopAudio(3)">⏸️ Stop</button>
-      <button class="audio-button" onclick="resetAudio(3)">⏹️ Reset</button>
-      <div class="progress-wrapper">
-        <div class="audio-progress" id="progress-3"></div>
-      </div>
-    </div>
-    
     <button onclick="goToPage('main-page')">BACK 🔙</button>
   </div>
 </div>
