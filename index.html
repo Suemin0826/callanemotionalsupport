@@ -1,7 +1,113 @@
-<!-- 중간 생략 (head와 기존 스타일 유지) -->
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Stable Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet" />
 <style>
   /* 기존 스타일 유지 + 새 요소 추가 */
+   :root {
+        --accent: #a5e1c3;
+        --accent-dark: #78c2a8;
+        --background: #fffef6;
+        --text: #222;
+        --hud-bg: #eafaf1;
+        --pink: #ffb6b9;
+        --pink-dark: #ff8b8d;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--background);
+        color: var(--text);
+        font-family: 'Pixelify Sans', sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        margin-top: 40px;
+        font-size: 24px;
+      }
+
+      p {
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        font-family: 'Pixelify Sans', sans-serif;
+        background-color: var(--accent);
+        color: var(--text);
+        border: 2px solid var(--accent-dark);
+        padding: 10px 14px;
+        margin: 6px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 0;
+        box-shadow: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: inset 0 0 0 2px var(--accent-dark);
+      }
+
+      #hud {
+        padding: 30px;
+        border: 2px solid var(--accent-dark);
+        border-radius: 0;
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: var(--hud-bg);
+        box-shadow: none;
+      }
+
+      .page { display: none; }
+      .active { display: block; }
+
+      .progress-container {
+        width: 80%;
+        margin: 10px auto;
+        background-color: #f3f3f3;
+        border: 2px solid var(--accent-dark);
+        height: 16px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: var(--accent);
+        width: 0;
+      }
+
+      .record-log {
+        background-color: #f3fef6;
+        padding: 15px;
+        border: 2px solid var(--accent-dark);
+        max-height: 200px;
+        overflow-y: auto;
+        font-size: 12px;
+        margin: 10px auto;
+      }
+
+      .audio-button {
+        background-color: var(--pink);
+        border-color: var(--pink-dark);
+      }
+
+      .audio-button:hover {
+        box-shadow: inset 0 0 0 2px var(--pink-dark);
+      }
+
+      .audio-controls {
+        margin-top: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
   .audio-controls {
     display: flex;
     align-items: center;
@@ -9,7 +115,6 @@
     gap: 6px;
     margin: 8px 0;
   }
-
   .progress-wrapper {
     height: 8px;
     background-color: #f0f0f0;
