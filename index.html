@@ -147,13 +147,48 @@
         <button onclick="goToPage('love-page')">LOVING WORDS 💖</button>
       </div>
     </div>
+    
+    <div id="breathing-page" class="page">
+      <div id="hud">
+        <h1>🫧 BREATHING 🫧</h1>
+        <div class="breathing-circle"></div>
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
+      </div>
+    </div>
 
-    <div id="audio-page" class="page">
+    <div id="panic-page" class="page">
+      <div id="hud">
+        <h1>🚨 PANIC MODE 🚨</h1>
+        <p id="panic-message">Preparing support message...</p>
+        <img id="panic-gif" src="" alt="calming gif" style="max-width: 200px; display: block; margin: 20px auto;">
+        <div id="timer-display"></div>
+
+        <!-- 로딩 바 -->
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
+      </div>
+    </div>
+
+    <div id="log-page" class="page">
+      <div id="hud">
+        <h1>📜 PANIC HISTORY</h1>
+        <div id="panic-log" class="record-log"></div>
+        <button onclick="clearLog()">RESET LOG ❌</button>
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
+      </div>
+    </div>
+    
+  <div id="audio-page" class="page">
       <div id="hud">
         <h1>🎙️ Suemin's Yapp 🎶</h1>
         <p>Select an audio to play:</p>
-        <div id="audio-section"></div>
-        <button onclick="goToPage('main-page')">BACK 💙</button>
+        <button class="audio-button" onclick="playAudio(1)">Audio 1 🎤</button>
+        <button class="audio-button" onclick="playAudio(2)">Audio 2 🎧</button>
+        <button class="audio-button" onclick="playAudio(3)">Audio 3 🎶</button>
+        <button onclick="goToPage('main-page')">BACK 🔙</button>
       </div>
     </div>
 
@@ -167,10 +202,74 @@
     </div>
 
     <script>
+      const messages = [
+        "You’ve got this 💪",
+        "Breathe slowly 🫁",
+        "You are not alone 🌟",
+        "Let it pass gently 💧",
+        "This will end soon ☁️"
+      ];
+
+      const gifs = [
+        "https://i.imgur.com/yyfvI8u.gif"
+      ];
+
+      function goToPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      }
+
+      function triggerPanic() {
+        goToPage('panic-page');
+        const message = messages[Math.floor(Math.random() * messages.length)];
+        const gif = gifs[Math.floor(Math.random() * gifs.length)];
+
+        document.getElementById('panic-message').textContent = message;
+        document.getElementById('panic-gif').src = gif;
+        startTimer(60);
+
+        const now = new Date();
+        const log = document.getElementById('panic-log');
+        const entry = document.createElement('p');
+        entry.textContent = `Panic button pressed at ${now.toLocaleString()}`;
+        log.appendChild(entry);
+
+        localStorage.setItem('panic-log', log.innerHTML);
+      }
+
+      function clearLog() {
+        localStorage.removeItem('panic-log');
+        document.getElementById('panic-log').innerHTML = '';
+      }
+
+      function loadLog() {
+        const stored = localStorage.getItem('panic-log');
+        if (stored) document.getElementById('panic-log').innerHTML = stored;
+      }
+
+      function startTimer(seconds) {
+        const display = document.getElementById('timer-display');
+        const progressBar = document.getElementById('progress-bar');
+        let remaining = seconds;
+        display.textContent = `⏱️ ${remaining} seconds`;
+
+        const interval = setInterval(() => {
+          remaining--;
+          display.textContent = `⏱️ ${remaining} seconds`;
+          const percentage = (1 - remaining / seconds) * 100;
+          progressBar.style.width = `${percentage}%`;
+
+          if (remaining <= 0) {
+            clearInterval(interval);
+            display.textContent = "All done. You’re okay now 🌤️";
+          }
+        }, 1000);
+      }
+      
       const audioData = [
-        { file: 'audio/Startrek.m4a', name: '🎶Audio 1🎶' },
-        { file: 'audio/Monet.m4a', name: '🎶Audio 2🎶' },
-        { file: 'audio/Matcha.m4a', name: '🎶Audio 3🎶' },
+        { file: 'audio/Startrek.m4a', name: 'Audio 1' },
+        { file: 'audio/Monet.m4a', name: 'Audio 2' },
+        { file: 'audio/Matcha.m4a', name: 'Audio 3' },
       ];
 
       function renderAudioControls() {
