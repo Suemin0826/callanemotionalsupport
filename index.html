@@ -7,9 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet" />
     <style>
       :root {
-        --accent: #a5e1c3;
+        --accent: #a5e1c3; /* 부드러운 초록색 */
         --accent-dark: #78c2a8;
-        --background: #fffef6;
+        --background: #fffef6; /* 크림색 바탕 */
         --text: #222;
         --hud-bg: #eafaf1;
       }
@@ -94,6 +94,23 @@
         font-weight: bold;
       }
 
+      /* 로딩 바 스타일 */
+      .progress-container {
+        width: 100%;
+        background-color: #f3f3f3;
+        border: 2px solid var(--accent-dark);
+        border-radius: 5px;
+        margin: 10px 0;
+        height: 20px;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background-color: var(--accent);
+        width: 0;
+        border-radius: 5px;
+      }
+
       .record-log {
         background-color: #f3fef6;
         padding: 15px;
@@ -141,6 +158,12 @@
         <p id="panic-message">Preparing support message...</p>
         <img id="panic-gif" src="" alt="calming gif" style="max-width: 200px; display: block; margin: 20px auto;">
         <div id="timer-display"></div>
+
+        <!-- 로딩 바 -->
+        <div class="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
         <button onclick="goToPage('main-page')">BACK 🔙</button>
       </div>
     </div>
@@ -175,7 +198,9 @@
       ];
 
       const gifs = [
-        "https://i.imgur.com/yyfvI8u.gif"
+        "https://media.giphy.com/media/3o7abldj0b3rxrZUxW/giphy.gif",
+        "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif",
+        "https://media.giphy.com/media/l4FGuhL4U2WyjdkaY/giphy.gif"
       ];
 
       function goToPage(id) {
@@ -213,12 +238,16 @@
 
       function startTimer(seconds) {
         const display = document.getElementById('timer-display');
+        const progressBar = document.getElementById('progress-bar');
         let remaining = seconds;
         display.textContent = `⏱️ ${remaining} seconds`;
 
         const interval = setInterval(() => {
           remaining--;
           display.textContent = `⏱️ ${remaining} seconds`;
+          const percentage = (1 - remaining / seconds) * 100;
+          progressBar.style.width = `${percentage}%`;
+
           if (remaining <= 0) {
             clearInterval(interval);
             display.textContent = "All done. You’re okay now 🌤️";
