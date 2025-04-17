@@ -1,270 +1,203 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Project Stable Console</title>
-    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap" rel="stylesheet" />
-    <style>
-      :root {
-        --accent: #a5e1c3; /* 부드러운 초록색 */
-        --accent-dark: #78c2a8;
-        --background: #fffef6; /* 크림색 바탕 */
-        --text: #222;
-        --hud-bg: #eafaf1;
-      }
+<!-- 중간 생략 (head와 기존 스타일 유지) -->
 
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: var(--background);
-        color: var(--text);
-        font-family: 'Pixelify Sans', sans-serif;
-        text-align: center;
-      }
+<style>
+  /* 기존 스타일 유지 + 새 요소 추가 */
+  .audio-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 8px 0;
+  }
 
-      h1 {
-        margin-top: 40px;
-        font-size: 24px;
-      }
+  .progress-wrapper {
+    height: 8px;
+    background-color: #f0f0f0;
+    border: 2px solid var(--accent-dark);
+    width: 80%;
+    margin: 6px auto 12px auto;
+    position: relative;
+  }
 
-      p {
-        font-size: 14px;
-        margin-bottom: 20px;
-      }
+  .audio-progress {
+    background-color: var(--accent);
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
 
-      button {
-        font-family: 'Pixelify Sans', sans-serif;
-        background-color: var(--accent);
-        color: var(--text);
-        border: 2px solid var(--accent-dark);
-        padding: 15px 20px;
-        margin: 10px auto;
-        display: block;
-        font-size: 14px;
-        cursor: pointer;
-        border-radius: 0;
-        box-shadow: none;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-        width: 80%;
-        max-width: 300px;
-      }
+  .loving-message {
+    font-size: 16px;
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f3fef6;
+    border: 2px solid var(--accent-dark);
+    display: inline-block;
+  }
+</style>
 
-      button:hover {
-        transform: translateY(-2px);
-        box-shadow: inset 0 0 0 2px var(--accent-dark);
-      }
+<!-- 기존 main-page 버튼 아래에 추가 -->
+<button onclick="goToPage('love-page')">LOVING WORDS 💖</button>
 
-      #hud {
-        padding: 30px;
-        border: 2px solid var(--accent-dark);
-        border-radius: 0;
-        max-width: 600px;
-        margin: 40px auto;
-        background-color: var(--hud-bg);
-        box-shadow: none;
-      }
+<!-- loving words page -->
+<div id="love-page" class="page">
+  <div id="hud">
+    <h1>💖 LOVING WORDS 💖</h1>
+    <p class="loving-message" id="love-quote">Click below for Suemin's loving message to Callan ✨</p>
+    <button onclick="showLovingQuote()">NEW MESSAGE 💌</button>
+    <button onclick="goToPage('main-page')">BACK 🔙</button>
+  </div>
+</div>
 
-      .page {
-        display: none;
-      }
+<!-- 오디오 페이지 내부를 다음처럼 바꿔줘 -->
+<div id="audio-page" class="page">
+  <div id="hud">
+    <h1>🎙️ Suemin's Yapp 🎶</h1>
+    <p>Select an audio to play:</p>
 
-      .active {
-        display: block;
-      }
-
-      .breathing-circle {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        margin: 30px auto;
-        background-color: var(--accent);
-        animation: breathe 6s ease-in-out infinite;
-      }
-
-      @keyframes breathe {
-        0% { transform: scale(1); opacity: 0.6; }
-        50% { transform: scale(1.5); opacity: 1; }
-        100% { transform: scale(1); opacity: 0.6; }
-      }
-
-      #timer-display {
-        font-size: 18px;
-        margin: 10px 0;
-        font-weight: bold;
-      }
-
-      /* 로딩 바 스타일 */
-      .progress-container {
-        width: 100%;
-        background-color: #f3f3f3;
-        border: 2px solid var(--accent-dark);
-        border-radius: 5px;
-        margin: 10px 0;
-        height: 20px;
-      }
-
-      .progress-bar {
-        height: 100%;
-        background-color: var(--accent);
-        width: 0;
-        border-radius: 5px;
-      }
-
-      .record-log {
-        background-color: #f3fef6;
-        padding: 15px;
-        border: 2px solid var(--accent-dark);
-        border-radius: 0;
-        max-height: 200px;
-        overflow-y: auto;
-        font-size: 12px;
-        margin: 10px auto;
-      }
-
-      .audio-button {
-        background-color: #ffb6b9;
-      }
-
-      .audio-button:hover {
-        transform: translateY(-2px);
-        box-shadow: inset 0 0 0 2px #ff8b8d;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="main-page" class="page active">
-      <div id="hud">
-        <h1>🌿 STABLE CONSOLE 🌿</h1>
-        <p>"In the midst of chaos, you are safe here."</p>
-        <button onclick="goToPage('breathing-page')">START BREATHING 🌬️</button>
-        <button onclick="triggerPanic()">PANIC BUTTON 🚨</button>
-        <button onclick="goToPage('log-page')">PANIC LOG 📜</button>
-        <button onclick="goToPage('audio-page')">Suemin's Yapp 🎙️</button>
-      </div>
+    <div id="audio-section">
+      <!-- 오디오 항목들은 JS로 생성됨 -->
     </div>
 
-    <div id="breathing-page" class="page">
-      <div id="hud">
-        <h1>🫧 BREATHING 🫧</h1>
-        <div class="breathing-circle"></div>
-        <button onclick="goToPage('main-page')">BACK 🔙</button>
-      </div>
-    </div>
+    <button onclick="goToPage('main-page')">BACK 🔙</button>
+  </div>
+</div>
 
-    <div id="panic-page" class="page">
-      <div id="hud">
-        <h1>🚨 PANIC MODE 🚨</h1>
-        <p id="panic-message">Preparing support message...</p>
-        <img id="panic-gif" src="" alt="calming gif" style="max-width: 200px; display: block; margin: 20px auto;">
-        <div id="timer-display"></div>
+<script>
+  const audioFiles = [
+    { title: "Audio 1 🎤", src: "audio/Startrek.m4a" },
+    { title: "Audio 2 🎧", src: "audio/Monet.m4a" },
+    { title: "Audio 3 🎶", src: "audio/Matcha.m4a" }
+  ];
 
-        <!-- 로딩 바 -->
-        <div class="progress-container">
-          <div class="progress-bar" id="progress-bar"></div>
-        </div>
+  const audioPlayers = [];
 
-        <button onclick="goToPage('main-page')">BACK 🔙</button>
-      </div>
-    </div>
+  function renderAudioControls() {
+    const container = document.getElementById("audio-section");
+    container.innerHTML = "";
 
-    <div id="log-page" class="page">
-      <div id="hud">
-        <h1>📜 PANIC HISTORY</h1>
-        <div id="panic-log" class="record-log"></div>
-        <button onclick="clearLog()">RESET LOG ❌</button>
-        <button onclick="goToPage('main-page')">BACK 🔙</button>
-      </div>
-    </div>
+    audioFiles.forEach((audio, index) => {
+      const wrapper = document.createElement("div");
 
-    <div id="audio-page" class="page">
-      <div id="hud">
-        <h1>🎙️ Suemin's Yapp 🎶</h1>
-        <p>Select an audio to play:</p>
-        <button class="audio-button" onclick="playAudio(1)">Audio 1 🎤</button>
-        <button class="audio-button" onclick="playAudio(2)">Audio 2 🎧</button>
-        <button class="audio-button" onclick="playAudio(3)">Audio 3 🎶</button>
-        <button onclick="goToPage('main-page')">BACK 🔙</button>
-      </div>
-    </div>
+      const titleBtn = document.createElement("button");
+      titleBtn.textContent = audio.title;
+      titleBtn.className = "audio-button";
 
-    <script>
-      const messages = [
-        "You’ve got this 💪",
-        "Breathe slowly 🫁",
-        "You are not alone 🌟",
-        "Let it pass gently 💧",
-        "This will end soon ☁️"
-      ];
+      const stopBtn = document.createElement("button");
+      stopBtn.textContent = "⏸️";
+      stopBtn.className = "audio-button";
+      stopBtn.style.backgroundColor = "#ffe29a";
 
-      const gifs = [
-        "https://i.imgur.com/yyfvI8u.gif"
-      ];
+      const resetBtn = document.createElement("button");
+      resetBtn.textContent = "⏹️";
+      resetBtn.className = "audio-button";
+      resetBtn.style.backgroundColor = "#c4f0ff";
 
-      function goToPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-      }
+      const progressWrapper = document.createElement("div");
+      progressWrapper.className = "progress-wrapper";
 
-      function triggerPanic() {
-        goToPage('panic-page');
-        const message = messages[Math.floor(Math.random() * messages.length)];
-        const gif = gifs[Math.floor(Math.random() * gifs.length)];
+      const progress = document.createElement("div");
+      progress.className = "audio-progress";
+      progressWrapper.appendChild(progress);
 
-        document.getElementById('panic-message').textContent = message;
-        document.getElementById('panic-gif').src = gif;
-        startTimer(60);
+      const audioElement = new Audio(audio.src);
+      audioPlayers.push(audioElement);
 
-        const now = new Date();
-        const log = document.getElementById('panic-log');
-        const entry = document.createElement('p');
-        entry.textContent = `Panic button pressed at ${now.toLocaleString()}`;
-        log.appendChild(entry);
+      titleBtn.onclick = () => {
+        audioPlayers.forEach((a, i) => {
+          if (i !== index) a.pause();
+        });
+        audioElement.play();
+      };
 
-        localStorage.setItem('panic-log', log.innerHTML);
-      }
+      stopBtn.onclick = () => {
+        audioElement.pause();
+      };
 
-      function clearLog() {
-        localStorage.removeItem('panic-log');
-        document.getElementById('panic-log').innerHTML = '';
-      }
+      resetBtn.onclick = () => {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+        progress.style.width = "0%";
+      };
 
-      function loadLog() {
-        const stored = localStorage.getItem('panic-log');
-        if (stored) document.getElementById('panic-log').innerHTML = stored;
-      }
+      audioElement.addEventListener("timeupdate", () => {
+        const percent = (audioElement.currentTime / audioElement.duration) * 100;
+        progress.style.width = percent + "%";
+      });
 
-      function startTimer(seconds) {
-        const display = document.getElementById('timer-display');
-        const progressBar = document.getElementById('progress-bar');
-        let remaining = seconds;
-        display.textContent = `⏱️ ${remaining} seconds`;
+      const controlBar = document.createElement("div");
+      controlBar.className = "audio-controls";
+      controlBar.appendChild(titleBtn);
+      controlBar.appendChild(stopBtn);
+      controlBar.appendChild(resetBtn);
 
-        const interval = setInterval(() => {
-          remaining--;
-          display.textContent = `⏱️ ${remaining} seconds`;
-          const percentage = (1 - remaining / seconds) * 100;
-          progressBar.style.width = `${percentage}%`;
+      wrapper.appendChild(controlBar);
+      wrapper.appendChild(progressWrapper);
+      container.appendChild(wrapper);
+    });
+  }
 
-          if (remaining <= 0) {
-            clearInterval(interval);
-            display.textContent = "All done. You’re okay now 🌤️";
-          }
-        }, 1000);
-      }
+  const lovingQuotes = [
+    "You're my safe zone, Callan 🛡️",
+    "Like a Minecraft base at night, you're my protection 🌙🏰",
+    "We respawn in love every day ❤️🔁",
+    "When chaos strikes, you’re my Master Chief 💚⚔️",
+    "You're my favorite co-op partner 🎮💕",
+    "Even the Flood couldn't scare me with you around 👾",
+    "You’re stronger than any boss fight, love 🧡",
+    "Like rupees in Zelda, every second with you is valuable 💎",
+    "No cooldown needed—you're perfect always 💞",
+    "When you’re low on hearts, I’ll be your potion ❤️‍🩹",
+    "Callan, you light up my Triforce ✨",
+    "I choose you every day, even in Hardcore Mode 🥰",
+    "We’re better together, like Steve & Alex 🧱💖",
+    "You're my Pixel Pal forever 🎨🐹",
+    "This world’s wild, but we built our own safe chunk 🌍",
+    "Like Helldivers, we fight through the bugs and chaos 😂💥",
+    "Together, we’d win any campaign mode 💫",
+    "You're the only hero in my party, babe 💘",
+    "Let’s save this world—and cuddle after 🛏️🕹️",
+    "You’re more comforting than a fully-upgraded Zelda house 🛖",
+    "No panic can last with Suemin's spell 🧙‍♀️✨",
+    "You + Me = Best base defense system 💕🛡️",
+    "Respawned or not, I’ll love you endlessly 💗",
+    "You're the cake at the end of my dungeon 🍰🏆",
+    "From Kokiri Forest to Hyrule Castle, I’d follow you anywhere 🌳🏰",
+    "I love you more than full hearts in Zelda 💓💓💓",
+    "You’re the soul of my console 💾❤️",
+    "Even in Nether, I'd find you 🧡🔥",
+    "Suemin loves Callan to the moon and back 🚀🌕",
+    "You’re the final boss of my heart 💖👑",
+    "No matter the difficulty, we’ll always win 👫🎯",
+    "Like an enchanted shield, you protect me 🛡️💫",
+    "Every adventure starts and ends with you 🌅🎮",
+    "I’d craft a thousand pickaxes just for one smile 💎🔨",
+    "You’re the sparkle in my pixel sky ✨🟩",
+    "You're my warp zone to peace and joy 🌈",
+    "In dungeons or panic, I'm always with you 💗",
+    "Zelda's got Link, I've got you 🧝‍♂️💘",
+    "You calm my storms like Breath of the Wild winds 🌬️💞",
+    "I'd slay ten Creepers just to hear you laugh 💥😆",
+    "With you, even Helldivers bugs are fun 🐛💖",
+    "Together, we're invincible—even on Legendary 💪🎖️",
+    "You're my sacred relic 💎",
+    "You're my checkpoint in life 🏁",
+    "When I'm low on mana, you're my energy boost ⚡🧃",
+    "Callan, Suemin's love spell has no cooldown 💘🔁",
+    "You're my forever quest 🗺️💞",
+    "I'd respawn just to find you again 🌈💌",
+    "You're better than the rarest loot chest 🎁✨",
+    "I'd dive into Helldivers hell again for you 🔥🪐"
+  ];
 
-      function playAudio(audioNumber) {
-        const audioFiles = [
-          "audio/Startrek.m4a",
-          "audio/Monet.m4a",
-          "audio/Matcha.m4a"
-        ];
+  function showLovingQuote() {
+    const randomIndex = Math.floor(Math.random() * lovingQuotes.length);
+    document.getElementById("love-quote").textContent = lovingQuotes[randomIndex];
+  }
 
-        const audio = new Audio(audioFiles[audioNumber - 1]);
-        audio.play();
-      }
-
-      loadLog();
-    </script>
-  </body>
-</html>
+  // 기존 페이지 로딩 시 오디오 컨트롤 렌더
+  window.onload = () => {
+    loadLog();
+    renderAudioControls();
+  };
+</script>
